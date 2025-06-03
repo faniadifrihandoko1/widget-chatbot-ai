@@ -77,65 +77,35 @@
           Untuk menggunakan Altius Chat Widget, tambahkan kode berikut ke
           halaman HTML Anda:
         </p>
-        <pre><code>&lt;script src="https://cdn.altius.com/chat-widget/altius-chat-widget.min.js"&gt;&lt;/script&gt;
+        <pre><code>&lt;script src="https://https://heartfelt-cannoli-2ce304.netlify.app//altius-chat-widget.min.js"&gt;&lt;/script&gt;
 &lt;script&gt;
+  // Konfigurasi API
+  window.cakra_chat_api_id = "YOUR_API_ID";    // ID API Anda
+  window.cakra_chat_api_key = "YOUR_API_KEY";  // API Key Anda
+  window.cakra_personal_data = "DATA_PERSONAL"; // Data personal pengguna
+
+  <!-- // Inisialisasi widget
   window.AltiusChatWidget.init({
-    // Konfigurasi opsional
-    primaryColor: '#2563eb',    // Warna utama widget
-    textColor: '#ffffff',       // Warna teks
-    backgroundColor: '#f9fafb', // Warna latar belakang
-    borderRadius: '12px',       // Sudut melengkung
-    welcomeMessage: 'Selamat datang! Ada yang bisa kami bantu?' // Pesan selamat datang
-  });
+    primaryColor: '#dc2626',     // Warna utama widget
+    textColor: '#ffffff',        // Warna teks
+    backgroundColor: '#f9fafb',  // Warna latar belakang
+    borderRadius: '12px',        // Sudut melengkung
+    welcomeMessage: 'Selamat datang! Ada yang bisa kami bantu?', // Pesan selamat datang
+    position: 'bottom-right'     // Posisi widget (bottom-right)
+  }); -->
 &lt;/script&gt;</code></pre>
 
-        <h3>Metode yang Tersedia</h3>
-        <pre><code>// Mendapatkan instance widget
-const widget = window.AltiusChatWidget.init(config);
+     
 
-// Membuka chat
-widget.open();
-
-// Menutup chat
-widget.close();
-
-// Membersihkan riwayat chat
-widget.clearHistory();</code></pre>
-      </div>
-
-      <h2>Demo Controls</h2>
-      <div class="demo-controls">
-        <button onclick="window.widget.open()">Open Chat</button>
-        <button onclick="window.widget.close()">Close Chat</button>
-        <button onclick="window.widget.clearHistory()">Clear History</button>
-      </div>
-
-      <h2>API Reference</h2>
-      <pre><code>// Get widget instance
-const widget = window.AltiusChatWidget.init(config);
-
-// Open chat
-widget.open();
-
-// Close chat
-widget.close();
-
-// Clear chat history
-widget.clearHistory();</code></pre>
-    </div>
+    <!-- Cakra Configuration -->
+    <script id="cakra-config" strategy="beforeInteractive">
+        window.cakra_chat_api_id = "225";
+        window.cakra_chat_api_key = "ba166318-3de1-4e48-9d52-7f3075acb142";
+        window.cakra_personal_data = "Nip Pegawai 012 dengan nama Fani Adi Frihandoko jenis kelamin Laki- laki dan tanggal lahir 01/01/90 telah menggunakan saldo cuti sebanyak 0 hari dari quota cuti tahunan 12 hari , untuk sisa saldo klaim atau saldo reimburse 0 dan telah di gunakan 0 pada tahun ini";
+    </script>
 
     <!-- Initialize widget with demo configuration -->
-    <script>
-      window.widget = window.AltiusChatWidget.init({
-        primaryColor: "#dc2626",
-        textColor: "#ffffff",
-        backgroundColor: "#f9fafb",
-        borderRadius: "12px",
-        welcomeMessage:
-          "Selamat datang di Altius People Demo! Ada yang bisa kami bantu?",
-        position: "bottom-right", // Menambahkan posisi widget di pojok kanan bawah
-      });
-    </script>
+    
     <script src="altius-chat-widget.min.js"></script>
   </body>
 </html>
