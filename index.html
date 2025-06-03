@@ -51,27 +51,57 @@
       button:hover {
         background: #b91c1c;
       }
+      .documentation {
+        margin-top: 30px;
+        padding: 20px;
+        background: #f8fafc;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+      }
+      .documentation h3 {
+        color: #1f2937;
+        margin-top: 0;
+      }
+      .documentation pre {
+        margin: 10px 0;
+      }
     </style>
   </head>
   <body>
     <div class="container">
       <h1>Altius Chat Widget Demo</h1>
 
-      <h2>Basic Usage</h2>
-      <p>Add this to your HTML:</p>
-      <pre><code>&lt;script src="index.js" data-auto-init&gt;&lt;/script&gt;</code></pre>
-
-      <h2>Advanced Usage</h2>
-      <p>Initialize with custom configuration:</p>
-      <pre><code>&lt;script&gt;
-window.AltiusChatWidget.init({
-    primaryColor: '#2563eb',
-    textColor: '#ffffff',
-    backgroundColor: '#f9fafb',
-    borderRadius: '12px',
-    welcomeMessage: 'Welcome to our support!'
-});
+      <div class="documentation">
+        <h3>Cara Penggunaan Widget</h3>
+        <p>
+          Untuk menggunakan Altius Chat Widget, tambahkan kode berikut ke
+          halaman HTML Anda:
+        </p>
+        <pre><code>&lt;script src="https://cdn.altius.com/chat-widget/altius-chat-widget.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  window.AltiusChatWidget.init({
+    // Konfigurasi opsional
+    primaryColor: '#2563eb',    // Warna utama widget
+    textColor: '#ffffff',       // Warna teks
+    backgroundColor: '#f9fafb', // Warna latar belakang
+    borderRadius: '12px',       // Sudut melengkung
+    welcomeMessage: 'Selamat datang! Ada yang bisa kami bantu?' // Pesan selamat datang
+  });
 &lt;/script&gt;</code></pre>
+
+        <h3>Metode yang Tersedia</h3>
+        <pre><code>// Mendapatkan instance widget
+const widget = window.AltiusChatWidget.init(config);
+
+// Membuka chat
+widget.open();
+
+// Menutup chat
+widget.close();
+
+// Membersihkan riwayat chat
+widget.clearHistory();</code></pre>
+      </div>
 
       <h2>Demo Controls</h2>
       <div class="demo-controls">
@@ -102,9 +132,10 @@ widget.clearHistory();</code></pre>
         backgroundColor: "#f9fafb",
         borderRadius: "12px",
         welcomeMessage:
-          "Welcome to Altius People Demo! How can I help you today?",
+          "Selamat datang di Altius People Demo! Ada yang bisa kami bantu?",
+        position: "bottom-right", // Menambahkan posisi widget di pojok kanan bawah
       });
     </script>
-    <script src="index.js"></script>
+    <script src="altius-chat-widget.min.js"></script>
   </body>
 </html>
