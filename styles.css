@@ -1,0 +1,251 @@
+.altius-chat-widget {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999999;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.altius-chat-bubble {
+  width: 60px;
+  height: 60px;
+  background: var(--altius-primary-color, #dc2626);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  border: none;
+  outline: none;
+}
+
+.altius-chat-bubble:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.altius-chat-bubble .altius-chat-icon {
+  width: 24px;
+  height: 24px;
+  fill: white;
+}
+
+.altius-chat-popup {
+  position: absolute;
+  bottom: 80px;
+  right: 0;
+  width: 350px;
+  height: 500px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.altius-chat-popup.show {
+  display: flex;
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.altius-chat-header {
+  background: var(--altius-primary-color, #dc2626);
+  color: white;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.altius-chat-logo {
+  width: 32px;
+  height: 32px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: var(--altius-primary-color, #dc2626);
+  font-size: 14px;
+}
+
+.altius-chat-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.altius-chat-content {
+  flex: 1;
+  background: #f8fafc;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.altius-chat-message {
+  max-width: 80%;
+  padding: 12px 16px;
+  border-radius: 18px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.altius-chat-message.bot {
+  background: white;
+  color: #374151;
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
+.altius-chat-message.user {
+  background: var(--altius-primary-color, #dc2626);
+  color: white;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+.altius-chat-input-area {
+  padding: 16px 20px;
+  background: white;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.altius-chat-input {
+  flex: 1;
+  border: 1px solid #d1d5db;
+  border-radius: 24px;
+  padding: 12px 16px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.altius-chat-input:focus {
+  border-color: var(--altius-primary-color, #dc2626);
+}
+
+.altius-chat-send {
+  width: 40px;
+  height: 40px;
+  background: var(--altius-primary-color, #dc2626);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.altius-chat-send:hover {
+  background: #b91c1c;
+  transform: scale(1.05);
+}
+
+.altius-chat-send:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.altius-chat-send-icon {
+  width: 18px;
+  height: 18px;
+  fill: white;
+}
+
+.altius-chat-close {
+  position: absolute;
+  bottom: -50px;
+  right: 10px;
+  width: 36px;
+  height: 36px;
+  background: #6b7280;
+  border: none;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.altius-chat-close:hover {
+  background: #4b5563;
+  transform: scale(1.1);
+}
+
+.altius-close-icon {
+  width: 16px;
+  height: 16px;
+  fill: white;
+}
+
+.altius-typing-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 16px;
+  background: white;
+  border-radius: 18px;
+  border-bottom-left-radius: 4px;
+  align-self: flex-start;
+  max-width: 80px;
+}
+
+.altius-typing-dot {
+  width: 6px;
+  height: 6px;
+  background: #9ca3af;
+  border-radius: 50%;
+  animation: altius-typing 1.4s infinite ease-in-out;
+}
+
+.altius-typing-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.altius-typing-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes altius-typing {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  30% {
+    transform: translateY(-10px);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .altius-chat-popup {
+    width: calc(100vw - 40px);
+    height: calc(100vh - 120px);
+    bottom: 80px;
+    right: 20px;
+    left: 20px;
+  }
+}

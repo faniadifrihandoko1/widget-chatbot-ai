@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Altius Chat Widget Demo</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        margin: 0;
+        padding: 20px;
+        background: #f3f4f6;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #1f2937;
+        margin-bottom: 20px;
+      }
+      pre {
+        background: #f8fafc;
+        padding: 15px;
+        border-radius: 4px;
+        overflow-x: auto;
+      }
+      code {
+        font-family: "Courier New", Courier, monospace;
+      }
+      .demo-controls {
+        margin-top: 20px;
+        padding: 15px;
+        background: #f8fafc;
+        border-radius: 4px;
+      }
+      button {
+        background: #dc2626;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-right: 10px;
+      }
+      button:hover {
+        background: #b91c1c;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Altius Chat Widget Demo</h1>
+
+      <h2>Basic Usage</h2>
+      <p>Add this to your HTML:</p>
+      <pre><code>&lt;script src="index.js" data-auto-init&gt;&lt;/script&gt;</code></pre>
+
+      <h2>Advanced Usage</h2>
+      <p>Initialize with custom configuration:</p>
+      <pre><code>&lt;script&gt;
+window.AltiusChatWidget.init({
+    primaryColor: '#2563eb',
+    textColor: '#ffffff',
+    backgroundColor: '#f9fafb',
+    borderRadius: '12px',
+    welcomeMessage: 'Welcome to our support!'
+});
+&lt;/script&gt;</code></pre>
+
+      <h2>Demo Controls</h2>
+      <div class="demo-controls">
+        <button onclick="window.widget.open()">Open Chat</button>
+        <button onclick="window.widget.close()">Close Chat</button>
+        <button onclick="window.widget.clearHistory()">Clear History</button>
+      </div>
+
+      <h2>API Reference</h2>
+      <pre><code>// Get widget instance
+const widget = window.AltiusChatWidget.init(config);
+
+// Open chat
+widget.open();
+
+// Close chat
+widget.close();
+
+// Clear chat history
+widget.clearHistory();</code></pre>
+    </div>
+
+    <!-- Initialize widget with demo configuration -->
+    <script>
+      window.widget = window.AltiusChatWidget.init({
+        primaryColor: "#dc2626",
+        textColor: "#ffffff",
+        backgroundColor: "#f9fafb",
+        borderRadius: "12px",
+        welcomeMessage:
+          "Welcome to Altius People Demo! How can I help you today?",
+      });
+    </script>
+    <script src="index.js"></script>
+  </body>
+</html>
