@@ -80,9 +80,9 @@
         <pre><code>&lt;script src="https://altius-chat-bot.netlify.app/altius-chat-widget.min.js"&gt;&lt;/script&gt;
 &lt;script&gt;
   // Konfigurasi API
-  window.chat_api_id = "YOUR_API_ID";    // ID API Anda
-  window.chat_api_key = "YOUR_API_KEY";  // API Key Anda
-  window.personal_data = "DATA_PERSONAL"; // Data personal pengguna
+  window.session_id = "YOUR_SESSION_ID";    // optional
+  window.chat_api_key = "YOUR_API_KEY";  // required (API Key Anda)
+  window.personal_data = "DATA_PERSONAL"; // required (Data personal pengguna)
 
   <!-- // Inisialisasi widget
   window.AltiusChatWidget.init({
