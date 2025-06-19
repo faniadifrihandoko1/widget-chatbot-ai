@@ -65,37 +65,63 @@
       .documentation pre {
         margin: 10px 0;
       }
+      .chat-arrow-anim {
+        position: fixed;
+        z-index: 1;
+        right: 38px;
+        bottom: 120px;
+        pointer-events: none;
+        animation: arrow-bounce 1.2s infinite;
+        transition: opacity 0.3s;
+      }
+      @keyframes arrow-bounce {
+        0%, 100% { transform: translateY(0) scale(1); opacity: 1; }
+        50% { transform: translateY(18px) scale(1.1); opacity: 0.8; }
+      }
+      .chat-arrow-anim.hide { opacity: 0; pointer-events: none; }
     </style>
   </head>
   <body>
     <div class="container">
       <h1>Altius Chat Widget Demo</h1>
 
-      <div class="documentation">
-        <h3>Cara Penggunaan Widget</h3>
-        <p>
-          Untuk menggunakan Altius Chat Widget, tambahkan kode berikut ke
-          halaman HTML Anda:
-        </p>
-        <pre><code>&lt;script src="https://altius-chat-bot.netlify.app/altius-chat-widget.min.js"&gt;&lt;/script&gt;
+      <div class="documentation" style="box-shadow:0 4px 16px rgba(0,0,0,0.07);">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;background:#18181b;border-radius:8px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="6" fill="#18181b"/><path d="M7 10V8.5C7 7.11929 8.11929 6 9.5 6H14.5C15.8807 6 17 7.11929 17 8.5V10" stroke="#dc2626" stroke-width="1.5"/><rect x="5" y="10" width="14" height="8" rx="2" stroke="#dc2626" stroke-width="1.5"/><circle cx="9" cy="14" r="1" fill="#dc2626"/><circle cx="12" cy="14" r="1" fill="#dc2626"/><circle cx="15" cy="14" r="1" fill="#dc2626"/></svg></span>
+          <div>
+            <h3 style="margin:0;">Cara Penggunaan Widget</h3>
+            <span style="color:#64748b;font-size:15px;">Integrasi mudah & cepat ke website Anda</span>
+          </div>
+        </div>
+        <ol style="margin:20px 0 10px 20px;padding:0 0 0 10px;">
+          <li style="margin-bottom:10px;">Salin dan tempelkan kode berikut ke dalam <b>&lt;head&gt;</b> atau sebelum <b>&lt;/body&gt;</b> di HTML Anda.</li>
+          <li style="margin-bottom:10px;">Ganti <span style='background:#fee2e2;color:#b91c1c;padding:2px 6px;border-radius:4px;font-size:13px;'>YOUR_API_KEY</span> dan <span style='background:#fef9c3;color:#b45309;padding:2px 6px;border-radius:4px;font-size:13px;'>DATA_PERSONAL</span> sesuai kebutuhan.</li>
+          <li>Widget siap digunakan! (Opsi: sesuaikan tampilan dengan konfigurasi tambahan)</li>
+          <li style="margin-top:10px;color:#dc2626;font-weight:500;">Klik ikon chat di pojok kanan bawah untuk mulai bertanya.</li>
+        </ol>
+        <div style="position:relative;margin-top:18px;">
+          <button onclick="navigator.clipboard.writeText(document.getElementById('altius-code').innerText);this.classList.add('copied');setTimeout(()=>this.classList.remove('copied'),1200);" style="position:absolute;top:14px;right:14px;background:rgba(24,24,27,0.7);border:none;padding:7px;border-radius:6px;cursor:pointer;z-index:2;display:flex;align-items:center;justify-content:center;transition:background 0.2s;" title="Copy">
+            <svg id="copy-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2" stroke="#fff" stroke-width="1.5"/><rect x="4" y="4" width="12" height="12" rx="2" fill="none" stroke="#fff" stroke-width="1.5"/></svg>
+            <span style="display:none;">Copy</span>
+          </button>
+          <pre style="background:#18181b;color:#fff;padding:20px 18px 18px 18px;border-radius:10px;margin-top:0;font-size:15px;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,0.10);font-family:'Fira Mono', 'Consolas', 'Menlo', monospace;"><code id="altius-code">&lt;script src=\"https://altius-chat-bot.netlify.app/altius-chat-widget.min.js\"&gt;&lt;/script&gt;
 &lt;script&gt;
   // Konfigurasi API
-  window.session_id = "YOUR_SESSION_ID";    // optional
-  window.chat_api_key = "YOUR_API_KEY";  // required (API Key Anda)
-  window.personal_data = "DATA_PERSONAL"; // required (Data personal pengguna)
+  window.session_id = \"YOUR_SESSION_ID\";    // <span style='background:#f1f5f9;color:#64748b;padding:1px 5px;border-radius:3px;font-size:12px;'>opsional</span>
+  window.chat_api_key = \"YOUR_API_KEY\";  // <span style='background:#fee2e2;color:#b91c1c;padding:1px 5px;border-radius:3px;font-size:12px;'>wajib</span>
+  window.personal_data = \"DATA_PERSONAL\"; // <span style='background:#fef9c3;color:#b45309;padding:1px 5px;border-radius:3px;font-size:12px;'>wajib</span>
 
-  <!-- // Inisialisasi widget
-  window.AltiusChatWidget.init({
-    primaryColor: '#dc2626',     // Warna utama widget
-    textColor: '#ffffff',        // Warna teks
-    backgroundColor: '#f9fafb',  // Warna latar belakang
-    borderRadius: '12px',        // Sudut melengkung
-    welcomeMessage: 'Selamat datang! Ada yang bisa kami bantu?', // Pesan selamat datang
-    position: 'bottom-right'     // Posisi widget (bottom-right)
-  }); -->
 &lt;/script&gt;</code></pre>
-
-     
+        </div>
+        <div style="margin-top:18px;font-size:14px;color:#64748b;">
+          <b>Keterangan:</b><br>
+          <span style='background:#fee2e2;color:#b91c1c;padding:2px 6px;border-radius:4px;font-size:13px;'>wajib</span> = Harus diisi &nbsp;|
+          <span style='background:#fef9c3;color:#b45309;padding:2px 6px;border-radius:4px;font-size:13px;'>DATA_PERSONAL</span> = Data personal pengguna
+        </div>
+        <style>
+          .documentation button.copied svg#copy-icon { filter: drop-shadow(0 0 2px #22c55e); }
+        </style>
+      </div>
 
     <!-- Cakra Configuration -->
     <script>
@@ -107,5 +133,31 @@
     <!-- Initialize widget with demo configuration -->
     
     <script src="altius-chat-widget.min.js"></script>
+    <!-- Animasi panah penunjuk ke chat bubble -->
+    <div id="chat-arrow-anim" class="chat-arrow-anim">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M24 6V38M24 38L36 26M24 38L12 26" stroke="#dc2626" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <script>
+      // Sembunyikan panah setelah chat dibuka
+      document.addEventListener('DOMContentLoaded', function() {
+        var bubble = document.getElementById('altius-chat-toggle');
+        var arrow = document.getElementById('chat-arrow-anim');
+        function hideArrow() {
+          if(arrow) arrow.classList.add('hide');
+        }
+        // Tunggu sampai bubble muncul (karena widget load async)
+        function waitBubble() {
+          var bubble = document.getElementById('altius-chat-toggle');
+          if (bubble) {
+            bubble.addEventListener('click', hideArrow);
+          } else {
+            setTimeout(waitBubble, 300);
+          }
+        }
+        waitBubble();
+      });
+    </script>
   </body>
 </html>
