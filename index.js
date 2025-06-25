@@ -98,7 +98,7 @@
       </div>
       <div id="chat-button">
         <span id="icon-chat" style="display: block;">
-          <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+          <svg  viewBox="0 0 48 48" fill="none">
             <circle cx="24" cy="24" r="24" fill="#F44336"/>
             <path d="M34 16a2 2 0 0 0-2-2H16a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10l4 4v-4h2a2 2 0 0 0 2-2V16z" fill="white"/>
             <rect x="18" y="20" width="12" height="2" rx="1" fill="#F44336"/>
@@ -106,7 +106,7 @@
           </svg>
         </span>
         <span id="icon-close" style="display: none;">
-          <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+          <svg  viewBox="0 0 48 48" fill="none">
             <circle cx="24" cy="24" r="24" fill="#F44336"/>
             <path d="M16 16L32 32M32 16L16 32" stroke="white" stroke-width="3" stroke-linecap="round"/>
           </svg>
