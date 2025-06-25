@@ -124,16 +124,15 @@
       </div>
 
     <!-- Cakra Configuration -->
-    <script>
-       window.session_id = ""; // Optional
-        window.chat_api_key = "ys9CcupuSP9l9fDAdfIWfxJ4hRnITEJlpxpc8jtKNcc1ELhITRyLfZIxAyvPGeBYoU0SB2lVDRlMwwEaTV"; // Required 
-        window.chat_api_tenant = "QU9K35univPdujD8Ovb3O6SW1LZMQ7uqMaG53rsRD8YIKXRZcgrK2RwlPVo7JFvJexmUVnxAbtt66u9mND"; // Required 
-        window.personal_data = "Data Personal"; // Required (Untuk penggunaan data personal) 
-    </script>
+   <script>
+  window.session_id = ""; // Optional
+  window.chat_api_key = "ys9CcupuSP9l9fDAdfIWfxJ4hRnITEJlpxpc8jtKNcc1ELhITRyLfZIxAyvPGeBYoU0SB2lVDRlMwwEaTV"; // Required 
+  window.chat_api_tenant = "QU9K35univPdujD8Ovb3O6SW1LZMQ7uqMaG53rsRD8YIKXRZcgrK2RwlPVo7JFvJexmUVnxAbtt66u9mND"; // Required 
+  window.personal_data = "Data Personal"; // Required (Untuk penggunaan data personal) 
+</script>
 
     <!-- Initialize widget with demo configuration -->
-    
-    <script src="altius-chat-widget.min.js"></script>
+    <script src="https://altius-chat-bot.netlify.app/altius-chat-widget.bundle.js"></script>
     <!-- Animasi panah penunjuk ke chat bubble -->
     <div id="chat-arrow-anim" class="chat-arrow-anim">
       <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -159,6 +158,11 @@
         }
         waitBubble();
       });
+    </script>
+    <script>
+      if (window.AltiusChatWidget && window.AltiusChatWidget.init) {
+        window.AltiusChatWidget.init();
+      }
     </script>
   </body>
 </html>

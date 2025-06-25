@@ -6,11 +6,12 @@
   "type": "module",
   "scripts": {
     "build": "node build.js",
+    "minify": "terser altius-chat-widget.bundle.js -o altius-chat-widget.min.js --compress --mangle",
+    "build:prod": "npm run build && npm run minify",
     "dev": "node dev-server.js",
     "test": "jest",
     "lint": "eslint .",
-    "format": "prettier --write .",
-    "minify": "terser index.js -o altius-chat-widget.min.js --compress --mangle"
+    "format": "prettier --write ."
   },
   "keywords": [
     "chat",
@@ -39,4 +40,4 @@
     "url": "https://github.com/altius/chat-widget/issues"
   },
   "homepage": "https://github.com/altius/chat-widget#readme"
-} 
+}
