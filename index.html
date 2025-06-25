@@ -164,5 +164,58 @@
         window.AltiusChatWidget.init();
       }
     </script>
+    <script>
+      let userAgentData = {
+        useragent_name: "Altius People",
+        bot_name: "Altius Assistant",
+        bot_logo_url: "https://ui-avatars.com/api/?name=AI&background=19c6c2&color=fff"
+      };
+    </script>
+    <script>
+      async function fetchUserAgentDetails() {
+        const token = window.chat_api_key;
+        const api_tenant = window.chat_api_tenant;
+        if (!token) {
+          console.warn("No authentication token available for user agent details");
+          return;
+        }
+
+        try {
+          const response = await fetch(
+            `https://aionegml-dev-c3aqcqg7abhhb2ag.southeastasia-01.azurewebsites.net/detail_useragent/${token}`,
+            {
+              method: "GET",
+              headers: {
+                "qubisa-api-key": api_tenant,
+              },
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          if (
+            data.success &&
+            data.data &&
+            data.data.detail_collection &&
+            data.data.detail_collection.length > 0
+          ) {
+            const agentDetail = data.data.detail_collection[0];
+            userAgentData = {
+              useragent_name: agentDetail.useragent_name || "Altius People",
+              bot_name: agentDetail.bot_name || "Altius Assistant",
+              bot_logo_url:
+                agentDetail.bot_logo_url ||
+                "https://ui-avatars.com/api/?name=AI&background=19c6c2&color=fff",
+            };
+            updateHeaderElements();
+          }
+        } catch (error) {
+          console.error("Error fetching user agent details:", error);
+        }
+      }
+    </script>
   </body>
 </html>
