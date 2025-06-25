@@ -1,0 +1,1091 @@
+/* Altius Chat Widget Styles */
+.ai-altius-altius-chat-widget {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999999;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.ai-altius-altius-chat-bubble {
+  width: 60px;
+  height: 60px;
+  background: #ef4444;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(30, 192, 170, 0.15);
+  transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  border: none;
+  outline: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-altius-altius-chat-bubble::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.3) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 50%;
+}
+
+.ai-altius-altius-chat-bubble:hover::before {
+  opacity: 1;
+}
+
+.ai-altius-altius-chat-bubble:hover {
+  background: #dc2626;
+}
+
+.ai-altius-altius-chat-bubble:active {
+  transform: scale(0.95);
+}
+
+.ai-altius-altius-chat-bubble.open {
+  box-shadow: 0 6px 20px rgba(30, 192, 170, 0.2);
+}
+
+.ai-altius-altius-chat-bubble.open .ai-altius-altius-chat-icon {
+  opacity: 0;
+  transform: scale(0.8) rotate(-90deg);
+}
+
+.ai-altius-altius-chat-bubble.open .ai-altius-altius-close-icon {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1) rotate(0deg);
+}
+
+.ai-altius-altius-chat-bubble .ai-altius-altius-chat-icon {
+  width: 24px;
+  height: 24px;
+  fill: #fff;
+  transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  position: relative;
+  z-index: 1;
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+.ai-altius-altius-chat-bubble .ai-altius-altius-close-icon {
+  width: 24px;
+  height: 24px;
+  fill: #fff;
+  transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8) rotate(90deg);
+  z-index: 1;
+  opacity: 0;
+}
+
+.ai-altius-altius-chat-popup {
+  position: absolute;
+  bottom: 80px;
+  right: 0;
+  width: 360px;
+  height: 500px;
+  max-height: 82vh;
+  background: #ffffff;
+  border-radius: 4px;
+  box-shadow: 0 8px 32px rgba(30, 192, 170, 0.12);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translateY(20px) scale(0.95);
+  opacity: 0;
+  transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transform-origin: bottom right;
+}
+
+.ai-altius-altius-chat-popup.show {
+  display: flex;
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.ai-altius-altius-chat-header {
+  flex: 0 0 11%;
+  min-height: 38px;
+  max-height: 15%;
+  background: #1ec0aa;
+  color: #fff;
+  padding: 15px 18px 15px 22px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 18px 0 rgba(30, 192, 170, 0.1);
+  transition: background 0.4s, box-shadow 0.3s;
+}
+
+.ai-altius-altius-chat-header:hover {
+  box-shadow: 0 8px 32px 0 rgba(30, 192, 170, 0.18);
+  background: #179e8c;
+}
+
+.ai-altius-altius-chat-logo {
+  width: 24px;
+  height: 24px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px 0 #1ec0aa88, 0 0 0 2px #fff;
+  padding: 2px;
+  overflow: visible;
+  margin-right: 0px;
+  transition: box-shadow 0.3s;
+}
+
+.ai-altius-altius-logo-img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  display: block;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: none;
+}
+
+.ai-altius-altius-chat-title {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  margin-bottom: 1px;
+  animation: altius-title-slide 0.5s ease-out 0.2s both;
+}
+
+.ai-altius-altius-chat-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: #e0e7ef;
+  font-weight: 500;
+  margin-top: 1px;
+}
+
+.ai-altius-altius-chat-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 4px #22c55e99;
+  display: inline-block;
+}
+
+.ai-altius-altius-chat-content {
+  flex: 1 1 68%;
+  min-height: 0;
+  max-height: 70%;
+  background: #f8fafc;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ai-altius-altius-chat-message {
+  max-width: 80%;
+  padding: 12px 16px;
+  border-radius: 18px;
+  font-size: 14px;
+  line-height: 1.4;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  animation: altius-message-slide 0.4s ease-out both;
+  transform-origin: bottom;
+}
+
+.ai-altius-altius-chat-message.bot {
+  animation-delay: 0.1s;
+}
+
+.ai-altius-altius-chat-message.user {
+  animation-delay: 0.2s;
+}
+
+@keyframes altius-message-slide {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.ai-altius-altius-chat-message-header {
+  font-size: 12px;
+  color: #9ca3af;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 80px;
+  gap: 12px;
+}
+
+.ai-altius-altius-chat-message-content {
+  word-break: break-word;
+  text-align: left;
+}
+
+.ai-altius-altius-chat-message.bot {
+  background: #ffffff;
+  color: #374151;
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+  border: 1px solid #a0ede3;
+  box-shadow: 0 2px 8px rgba(30, 192, 170, 0.1);
+}
+
+.ai-altius-altius-chat-message.user {
+  background: #e6faf8;
+  color: #179e8c;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+  border: 1px solid #a0ede3;
+  box-shadow: 0 2px 8px rgba(30, 192, 170, 0.1);
+}
+
+.ai-altius-altius-chat-input-area {
+  flex: 0 0 12%;
+  min-height: 44px;
+  max-height: 18%;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 16px;
+  background: #fff;
+  border-top: 1.5px solid #f3f4f6;
+  border-radius: 0 0 16px 16px;
+  box-sizing: border-box;
+}
+
+.ai-altius-altius-chat-input {
+  flex: 1;
+  border: 1.5px solid #a0ede3;
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-size: 15px;
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(30, 192, 170, 0.04);
+}
+
+.ai-altius-altius-chat-input:focus {
+  border-color: #1ec0aa;
+  box-shadow: 0 0 0 2px rgba(30, 192, 170, 0.15);
+}
+
+.ai-altius-altius-chat-input::placeholder {
+  color: #bdbdbd;
+  font-size: 15px;
+  opacity: 1;
+}
+
+.ai-altius-altius-chat-send {
+  width: 38px;
+  height: 38px;
+  font-size: 18px;
+  border-radius: 50%;
+  background: #1ec0aa;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(30, 192, 170, 0.18);
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+
+.ai-altius-altius-chat-send:hover {
+  background: #179e8c;
+  transform: scale(1.08);
+  box-shadow: 0 6px 24px rgba(30, 192, 170, 0.25);
+}
+
+.ai-altius-altius-chat-send:active {
+  background: #117c6b;
+  transform: scale(0.96);
+}
+
+.ai-altius-altius-chat-send-icon {
+  width: 19px;
+  height: 19px;
+  fill: #fff;
+  transition: transform 0.2s;
+}
+
+.ai-altius-altius-chat-send:hover .ai-altius-altius-chat-send-icon {
+  transform: translateX(2px);
+}
+
+.ai-altius-altius-chat-send:disabled {
+  background: #f3f4f6;
+  color: #ccc;
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 0.6;
+  transform: none;
+}
+
+.ai-altius-altius-chat-send:disabled .ai-altius-altius-chat-send-icon {
+  fill: #ccc;
+}
+
+.ai-altius-altius-chat-close {
+  position: absolute;
+  bottom: -50px;
+  right: 10px;
+  width: 44px;
+  height: 44px;
+  background: #fff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 50%;
+  color: #dc2626;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s;
+  outline: none;
+  animation: altius-close-bounce 0.6s ease-out 0.4s both;
+  z-index: 10;
+}
+
+@keyframes altius-close-bounce {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(-180deg);
+  }
+  50% {
+    transform: scale(1.2) rotate(0deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.ai-altius-altius-chat-close:hover {
+  background: #e6faf8;
+  color: #179e8c;
+  box-shadow: 0 4px 16px rgba(30, 192, 170, 0.18);
+  transform: scale(1.12) rotate(10deg);
+  border-color: #a0ede3;
+}
+
+.ai-altius-altius-close-icon {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: block;
+}
+
+.ai-altius-altius-typing-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 16px;
+  background: #ffffff;
+  border-radius: 18px;
+  border-bottom-left-radius: 4px;
+  align-self: flex-start;
+  max-width: 80px;
+  animation: altius-typing-fade 0.3s ease-out;
+}
+
+@keyframes altius-typing-fade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ai-altius-altius-typing-dot {
+  width: 6px;
+  height: 6px;
+  background: #9ca3af;
+  border-radius: 50%;
+  animation: altius-typing 1.4s ease-in-out infinite;
+}
+
+.ai-altius-altius-typing-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.ai-altius-altius-typing-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes altius-typing {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.5;
+  }
+  30% {
+    transform: translateY(-10px) scale(1.2);
+    opacity: 1;
+  }
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+  .ai-altius-altius-chat-popup {
+    width: 98vw;
+    max-width: 300px;
+    height: 68vh;
+    max-height: 82vh;
+    bottom: 50px;
+    right: 4px;
+    left: 4px;
+    border-radius: 16px;
+  }
+
+  .ai-altius-altius-chat-bubble {
+    width: 56px;
+    height: 56px;
+  }
+
+  .ai-altius-altius-chat-bubble .ai-altius-altius-chat-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .ai-altius-altius-chat-header {
+    max-height: 48px;
+  }
+
+  .ai-altius-altius-chat-logo {
+    width: 32px;
+    height: 32px;
+  }
+
+  .ai-altius-altius-logo-img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .ai-altius-altius-chat-title {
+    font-size: 14px;
+  }
+
+  .ai-altius-altius-chat-content {
+    max-height: calc(100% - 48px);
+  }
+
+  .ai-altius-altius-chat-message {
+    max-width: 85%;
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  .ai-altius-altius-chat-input-area {
+    padding: 8px 8px;
+    border-radius: 0 0 16px 16px;
+  }
+
+  .ai-altius-altius-chat-input {
+    padding: 10px 14px;
+    font-size: 13px;
+    border-radius: 20px;
+  }
+
+  .ai-altius-altius-chat-send {
+    width: 42px;
+    height: 42px;
+  }
+
+  .ai-altius-altius-chat-send-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .ai-altius-altius-chat-close {
+    bottom: -45px;
+    right: 8px;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .ai-altius-altius-chat-popup {
+    width: 98vw;
+    max-width: 300px;
+    height: 68vh;
+    max-height: 82vh;
+    bottom: 50px;
+    right: 4px;
+    left: 4px;
+    border-radius: 16px;
+  }
+
+  .ai-altius-altius-chat-header {
+    flex: 0 0 13%;
+    min-height: 34px;
+    max-height: 17%;
+    padding: 12px 15px 12px 18px;
+  }
+
+  .ai-altius-altius-chat-content {
+    flex: 1 1 72%;
+    min-height: 0;
+    max-height: 70%;
+  }
+
+  .ai-altius-altius-chat-input-area {
+    flex: 0 0 14%;
+    min-height: 36px;
+    max-height: 20%;
+    padding: 7px 7px;
+    gap: 5px;
+    border-radius: 0 0 10px 10px;
+  }
+
+  .ai-altius-altius-chat-input {
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+
+  .ai-altius-altius-chat-send {
+    width: 24px;
+    height: 24px;
+    font-size: 13px;
+  }
+
+  .ai-altius-altius-chat-send-icon {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+/* Large Desktop (1920px and above) */
+@media (min-width: 1920px) {
+  .ai-altius-altius-chat-popup {
+    width: 390px;
+    height: 540px;
+    max-height: 82vh;
+    bottom: 100px;
+    right: 40px;
+  }
+
+  .ai-altius-altius-chat-bubble {
+    width: 70px;
+    height: 70px;
+  }
+
+  .ai-altius-altius-chat-bubble .ai-altius-altius-chat-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .ai-altius-altius-chat-header {
+    max-height: 80px;
+  }
+
+  .ai-altius-altius-chat-logo {
+    width: 42px;
+    height: 42px;
+  }
+
+  .ai-altius-altius-chat-title {
+    font-size: 18px;
+  }
+
+  .ai-altius-altius-chat-content {
+    max-height: calc(100% - 80px);
+  }
+
+  .ai-altius-altius-chat-input-area {
+    padding: 14px 14px;
+  }
+
+  .ai-altius-altius-chat-input {
+    padding: 14px 18px;
+    font-size: 16px;
+  }
+
+  .ai-altius-altius-chat-send {
+    width: 52px;
+    height: 52px;
+  }
+
+  .ai-altius-altius-chat-send-icon {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+/* Standard Desktop (1366px - 1919px) */
+@media (min-width: 1366px) and (max-width: 1919px) {
+  .ai-altius-altius-chat-popup {
+    width: 360px;
+    height: 500px;
+    max-height: 82vh;
+    bottom: 80px;
+    right: 8px;
+  }
+
+  .ai-altius-altius-chat-bubble {
+    width: 60px;
+    height: 60px;
+  }
+
+  .ai-altius-altius-chat-bubble .ai-altius-altius-chat-icon {
+    width: 26px;
+    height: 26px;
+  }
+
+  .ai-altius-altius-chat-header {
+    max-height: 78px;
+  }
+
+  .ai-altius-altius-chat-logo {
+    width: 36px;
+    height: 36px;
+  }
+
+  .ai-altius-altius-chat-title {
+    font-size: 17px;
+  }
+
+  .ai-altius-altius-chat-content {
+    max-height: calc(100% - 72px);
+  }
+
+  .ai-altius-altius-chat-input-area {
+    padding: 12px 12px;
+  }
+
+  .ai-altius-altius-chat-input {
+    padding: 13px 17px;
+    font-size: 15px;
+  }
+
+  .ai-altius-altius-chat-send {
+    width: 50px;
+    height: 50px;
+  }
+
+  .ai-altius-altius-chat-send-icon {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+/* Small Desktop (1024px - 1365px) */
+@media (min-width: 1024px) and (max-width: 1365px) {
+  .ai-altius-altius-chat-popup {
+    width: 340px;
+    height: 460px;
+    max-height: 82vh;
+    bottom: 75px;
+    right: 25px;
+  }
+
+  .ai-altius-altius-chat-bubble {
+    width: 62px;
+    height: 62px;
+  }
+
+  .ai-altius-altius-chat-bubble .ai-altius-altius-chat-icon {
+    width: 25px;
+    height: 25px;
+  }
+
+  .ai-altius-altius-chat-header {
+    max-height: 64px;
+  }
+
+  .ai-altius-altius-chat-logo {
+    width: 38px;
+    height: 38px;
+  }
+
+  .ai-altius-altius-chat-title {
+    font-size: 16px;
+  }
+
+  .ai-altius-altius-chat-content {
+    max-height: calc(100% - 64px);
+  }
+
+  .ai-altius-altius-chat-input-area {
+    padding: 10px 10px;
+  }
+
+  .ai-altius-altius-chat-input {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+
+  .ai-altius-altius-chat-send {
+    width: 48px;
+    height: 48px;
+  }
+
+  .ai-altius-altius-chat-send-icon {
+    width: 25px;
+    height: 25px;
+  }
+}
+
+/* Tablet Landscape (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .ai-altius-altius-chat-popup {
+    width: 310px;
+    height: 420px;
+    max-height: 82vh;
+    bottom: 70px;
+    right: 20px;
+  }
+
+  .ai-altius-altius-chat-bubble {
+    width: 60px;
+    height: 60px;
+  }
+
+  .ai-altius-altius-chat-bubble .ai-altius-altius-chat-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .ai-altius-altius-chat-header {
+    max-height: 56px;
+  }
+
+  .ai-altius-altius-chat-logo {
+    width: 36px;
+    height: 36px;
+  }
+
+  .ai-altius-altius-chat-title {
+    font-size: 15px;
+  }
+
+  .ai-altius-altius-chat-content {
+    max-height: calc(100% - 56px);
+  }
+
+  .ai-altius-altius-chat-input-area {
+    padding: 8px 8px;
+  }
+
+  .ai-altius-altius-chat-input {
+    padding: 11px 15px;
+    font-size: 14px;
+  }
+
+  .ai-altius-altius-chat-send {
+    width: 46px;
+    height: 46px;
+  }
+
+  .ai-altius-altius-chat-send-icon {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* Tablet Portrait (481px - 767px) */
+@media (min-width: 481px) and (max-width: 767px) {
+  .ai-altius-altius-chat-popup {
+    width: 98vw;
+    max-width: 320px;
+    height: 74vh;
+    max-height: 82vh;
+    bottom: 65px;
+    right: 15px;
+  }
+
+  .ai-altius-altius-chat-bubble {
+    width: 58px;
+    height: 58px;
+  }
+
+  .ai-altius-altius-chat-bubble .ai-altius-altius-chat-icon {
+    width: 23px;
+    height: 23px;
+  }
+
+  .ai-altius-altius-chat-header {
+    max-height: 52px;
+  }
+
+  .ai-altius-altius-chat-logo {
+    width: 34px;
+    height: 34px;
+  }
+
+  .ai-altius-altius-chat-title {
+    font-size: 14px;
+  }
+
+  .ai-altius-altius-chat-content {
+    max-height: calc(100% - 52px);
+  }
+
+  .ai-altius-altius-chat-input-area {
+    padding: 8px 8px;
+  }
+
+  .ai-altius-altius-chat-input {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  .ai-altius-altius-chat-send {
+    width: 44px;
+    height: 44px;
+  }
+
+  .ai-altius-altius-chat-send-icon {
+    width: 23px;
+    height: 23px;
+  }
+}
+
+/* Enhanced Mobile Responsiveness (480px and below) */
+@media (max-width: 480px) {
+  .ai-altius-altius-chat-widget {
+    bottom: 8px;
+    right: 8px;
+  }
+
+  .ai-altius-altius-chat-popup {
+    width: 98vw;
+    max-width: 300px;
+    height: 68vh;
+    max-height: 82vh;
+    bottom: 50px;
+    right: 4px;
+    left: 4px;
+    border-radius: 16px;
+  }
+
+  .ai-altius-altius-chat-bubble {
+    width: 56px;
+    height: 56px;
+  }
+
+  .ai-altius-altius-chat-bubble .ai-altius-altius-chat-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .ai-altius-altius-chat-header {
+    max-height: 48px;
+  }
+
+  .ai-altius-altius-chat-logo {
+    width: 32px;
+    height: 32px;
+  }
+
+  .ai-altius-altius-logo-img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .ai-altius-altius-chat-title {
+    font-size: 14px;
+  }
+
+  .ai-altius-altius-chat-content {
+    max-height: calc(100% - 48px);
+  }
+
+  .ai-altius-altius-chat-message {
+    max-width: 85%;
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  .ai-altius-altius-chat-input-area {
+    padding: 8px 8px;
+    border-radius: 0 0 16px 16px;
+  }
+
+  .ai-altius-altius-chat-input {
+    padding: 10px 14px;
+    font-size: 13px;
+    border-radius: 20px;
+  }
+
+  .ai-altius-altius-chat-send {
+    width: 42px;
+    height: 42px;
+  }
+
+  .ai-altius-altius-chat-send-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .ai-altius-altius-chat-close {
+    bottom: -45px;
+    right: 8px;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+}
+
+/* Extra Small Mobile (320px and below) */
+@media (max-width: 320px) {
+  .ai-altius-altius-chat-widget {
+    bottom: 12px;
+    right: 12px;
+  }
+
+  .ai-altius-altius-chat-popup {
+    width: calc(100vw - 24px);
+    height: calc(100vh - 120px);
+    bottom: 70px;
+    right: 12px;
+    left: 12px;
+  }
+
+  .ai-altius-altius-chat-bubble {
+    width: 52px;
+    height: 52px;
+  }
+
+  .ai-altius-altius-chat-bubble .ai-altius-altius-chat-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .ai-altius-altius-chat-header {
+    max-height: 48px;
+  }
+
+  .ai-altius-altius-chat-logo {
+    width: 28px;
+    height: 28px;
+  }
+
+  .ai-altius-altius-logo-img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .ai-altius-altius-chat-title {
+    font-size: 13px;
+  }
+
+  .ai-altius-altius-chat-content {
+    max-height: calc(100% - 48px);
+  }
+
+  .ai-altius-altius-chat-message {
+    max-width: 90%;
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .ai-altius-altius-chat-input-area {
+    padding: 8px 8px;
+  }
+
+  .ai-altius-altius-chat-input {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .ai-altius-altius-chat-send {
+    width: 38px;
+    height: 38px;
+  }
+
+  .ai-altius-altius-chat-send-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .ai-altius-altius-chat-close {
+    bottom: -40px;
+    right: 6px;
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+}
+
+/* High DPI/Retina Display Support */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .ai-altius-altius-chat-bubble {
+    box-shadow: 0 2px 6px rgba(30, 192, 170, 0.15);
+  }
+
+  .ai-altius-altius-chat-popup {
+    box-shadow: 0 4px 16px rgba(30, 192, 170, 0.12);
+  }
+
+  .ai-altius-altius-chat-send {
+    box-shadow: 0 2px 8px rgba(30, 192, 170, 0.2);
+  }
+}
+
+/* Landscape orientation adjustments for mobile */
+@media (max-width: 767px) and (orientation: landscape) {
+  .ai-altius-altius-chat-popup {
+    height: calc(100vh - 100px);
+    bottom: 70px;
+  }
+
+  .ai-altius-altius-chat-content {
+    max-height: 60vh;
+  }
+
+  .ai-altius-altius-chat-input-area {
+    padding: 8px 8px;
+  }
+}
+
+/* Print styles - hide widget when printing */
+@media print {
+  .ai-altius-altius-chat-widget {
+    display: none !important;
+  }
+}

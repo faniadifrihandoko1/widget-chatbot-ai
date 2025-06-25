@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Bundle Widget</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #333;
+        text-align: center;
+      }
+      p {
+        line-height: 1.6;
+        color: #666;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🧪 Test Bundle Widget</h1>
+      <p>
+        Halaman ini untuk testing widget yang sudah di-bundle. Widget seharusnya
+        muncul di pojok kanan bawah.
+      </p>
+      <p>
+        Jika widget tidak muncul, buka Developer Tools (F12) dan lihat tab
+        Console untuk error.
+      </p>
+
+      <h2>Konfigurasi yang Diperlukan:</h2>
+      <ul>
+        <li>✅ chat_api_key</li>
+        <li>✅ chat_api_tenant</li>
+        <li>✅ personal_data</li>
+      </ul>
+    </div>
+
+    <!-- Konfigurasi Widget -->
+    <script>
+      window.session_id = ''; // Optional
+      window.chat_api_key =
+        'ys9CcupuSP9l9fDAdfIWfxJ4hRnITEJlpxpc8jtKNcc1ELhITRyLfZIxAyvPGeBYoU0SB2lVDRlMwwEaTV'; // Required
+      window.chat_api_tenant =
+        'QU9K35univPdujD8Ovb3O6SW1LZMQ7uqMaG53rsRD8YIKXRZcgrK2RwlPVo7JFvJexmUVnxAbtt66u9mND'; // Required
+      window.personal_data = 'Data Personal'; // Required
+    </script>
+
+    <!-- Load the bundled widget -->
+    <script src="altius-chat-widget.bundle.js"></script>
+  </body>
+</html>
