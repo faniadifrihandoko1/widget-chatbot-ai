@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Altius Chat Widget - Simple Test</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        color: #333;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        color: #1ec0aa;
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .info {
+        background: #e6faf8;
+        padding: 20px;
+        border-radius: 12px;
+        border-left: 4px solid #1ec0aa;
+        margin: 20px 0;
+      }
+
+      .code-block {
+        background: #2d3748;
+        color: #e2e8f0;
+        padding: 15px;
+        border-radius: 8px;
+        font-family: 'Courier New', monospace;
+        font-size: 14px;
+        overflow-x: auto;
+        margin: 10px 0;
+      }
+
+      .status {
+        background: #fff3cd;
+        border: 1px solid #ffeaa7;
+        color: #856404;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 20px 0;
+      }
+
+      .status.success {
+        background: #d4edda;
+        border-color: #c3e6cb;
+        color: #155724;
+      }
+
+      .status.error {
+        background: #f8d7da;
+        border-color: #f5c6cb;
+        color: #721c24;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🤖 Altius Chat Widget Test</h1>
+
+      <div class="info">
+        <h3>📋 Setup Instructions:</h3>
+        <ol>
+          <li>Open browser console (F12)</li>
+          <li>Set your API credentials:</li>
+        </ol>
+        <div class="code-block">
+          window.chat_api_key = "your-api-key"; window.chat_api_tenant =
+          "your-tenant"; window.personal_data = { name: "Your Name", email:
+          "your@email.com" };
+        </div>
+        <ol start="3">
+          <li>Refresh the page</li>
+          <li>Widget should appear in bottom-right corner</li>
+        </ol>
+      </div>
+
+      <div class="status" id="status">
+        <strong>Status:</strong> Waiting for API credentials...
+      </div>
+
+      <div class="info">
+        <h3>🔧 Manual Setup:</h3>
+        <p>
+          If you want to set credentials manually, you can also edit this file
+          and add your credentials directly in the script section below.
+        </p>
+      </div>
+
+      <p>
+        This is a test page for the Altius Chat Widget. The widget should appear
+        in the bottom-right corner of the screen.
+      </p>
+
+      <p>
+        If you don't see the widget, check the browser console for any error
+        messages.
+      </p>
+    </div>
+
+    <!-- Setup demo credentials -->
+    <script>
+      // Demo credentials (replace with real ones)
+      window.chat_api_key = 'demo-api-key';
+      window.chat_api_tenant = 'demo-tenant';
+      window.personal_data = {
+        name: 'Demo User',
+        email: 'demo@example.com',
+      };
+
+      // Update status
+      function updateStatus(message, type = 'info') {
+        const statusEl = document.getElementById('status');
+        statusEl.innerHTML = `<strong>Status:</strong> ${message}`;
+        statusEl.className = `status ${type}`;
+      }
+
+      // Check if credentials are set
+      if (window.chat_api_key && window.chat_api_key !== 'demo-api-key') {
+        updateStatus(
+          'API credentials detected! Widget should load shortly...',
+          'success'
+        );
+      } else {
+        updateStatus(
+          'Please set your API credentials in the browser console',
+          'error'
+        );
+      }
+    </script>
+
+    <!-- Include widget -->
+    <script src="altius-chat-widget.min.js"></script>
+  </body>
+</html>

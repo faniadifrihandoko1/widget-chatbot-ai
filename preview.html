@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Altius Chat Widget Demo</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+      .demo-content {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #333;
+        text-align: center;
+      }
+      .demo-text {
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 30px;
+      }
+      .code-block {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 4px;
+        padding: 15px;
+        margin: 20px 0;
+        font-family: 'Courier New', monospace;
+        font-size: 14px;
+        overflow-x: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="demo-content">
+      <h1>Altius Chat Widget Demo</h1>
+      <p class="demo-text">
+        This page demonstrates the Altius Chat Widget. The widget is
+        automatically loaded and configured with the scripts below. You can see
+        the chat widget in the bottom-right corner of the page.
+      </p>
+
+      <h3>Integration Code:</h3>
+      <div class="code-block">
+        &lt;script&gt;<br />
+        &nbsp;&nbsp;window.session_id = ""; // Optional<br />
+        &nbsp;&nbsp;window.chat_api_key =
+        "ys9CcupuSP9l9fDAdfIWfxJ4hRnITEJlpxpc8jtKNcc1ELhITRyLfZIxAyvPGeBYoU0SB2lVDRlMwwEaTV";<br />
+        &nbsp;&nbsp;window.chat_api_tenant =
+        "QU9K35univPdujD8Ovb3O6SW1LZMQ7uqMaG53rsRD8YIKXRZcgrK2RwlPVo7JFvJexmUVnxAbtt66u9mND";<br />
+        &nbsp;&nbsp;window.personal_data = "Data Personal";<br />
+        &lt;/script&gt;<br /><br />
+        &lt;script src="altius-chat-widget.min.js"&gt;&lt;/script&gt;
+      </div>
+
+      <p class="demo-text">
+        The widget will appear in the bottom-right corner. Click on it to start
+        chatting with the AI assistant. The widget automatically handles session
+        creation and API communication.
+      </p>
+    </div>
+
+    <!-- Widget Configuration -->
+    <script>
+      window.session_id = ''; // Optional
+      window.chat_api_key =
+        'ys9CcupuSP9l9fDAdfIWfxJ4hRnITEJlpxpc8jtKNcc1ELhITRyLfZIxAyvPGeBYoU0SB2lVDRlMwwEaTV'; // Required
+      window.chat_api_tenant =
+        'QU9K35univPdujD8Ovb3O6SW1LZMQ7uqMaG53rsRD8YIKXRZcgrK2RwlPVo7JFvJexmUVnxAbtt66u9mND'; // Required
+      window.personal_data = 'Data Personal'; // Required
+    </script>
+
+    <!-- Load the widget -->
+    <script src="index.js"></script>
+  </body>
+</html>
