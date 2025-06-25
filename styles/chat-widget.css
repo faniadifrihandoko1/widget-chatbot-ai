@@ -144,6 +144,11 @@
   padding: 2px;
 }
 
+#header-menu-btn svg {
+  width: 26px !important;
+  height: 26px !important;
+}
+
 #chat-widget .header-menu:focus svg,
 #chat-widget .header-menu:hover svg {
   background: rgba(255, 255, 255, 0.12);
@@ -479,6 +484,11 @@
   height: 60px !important;
 }
 
+#header-menu svg {
+  width: 24px !important;
+  height: 24px !important;
+}
+
 #chat-widget .avatar-card {
   background: #fff;
   border-radius: 50%;
@@ -505,11 +515,11 @@
   position: absolute;
   right: 0px;
   bottom: 0px;
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
   background: #22c55e;
   border-radius: 50%;
-  border: 2px solid #fff;
+  border: 1px solid #fff;
   box-shadow: 0 0 0 2px #19c6c2;
   display: block;
   margin: 0;

@@ -157,7 +157,7 @@
         <div class="header">
           <div class="avatar avatar-card">
             <img id="bot-logo" src="${userAgentData.bot_logo_url}" alt="Bot Logo" />
-            <span class="status-dot"></span>
+            <span class="status-dot" id="bot-status"></span>
           </div>
           <div class="title">
             <div class="title-text" id="bot-name">${userAgentData.bot_name}</div>
