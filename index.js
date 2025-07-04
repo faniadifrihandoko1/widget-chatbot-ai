@@ -83,7 +83,6 @@
 
   async function fetchUserAgentDetails() {
     const token = window.chat_api_key;
-    const api_tenant = window.chat_api_tenant;
     if (!token) {
       console.warn('No authentication token available for user agent details');
       return;
@@ -91,11 +90,11 @@
 
     try {
       const response = await fetch(
-        `https://aionegml-dev-c3aqcqg7abhhb2ag.southeastasia-01.azurewebsites.net/detail_useragent/${token}`,
+        'https://aionegml-dev-c3aqcqg7abhhb2ag.southeastasia-01.azurewebsites.net/detail_useragent_chat',
         {
           method: 'GET',
           headers: {
-            'qubisa-api-key': api_tenant,
+            'qubisa-token-key': token,
           },
         }
       );
