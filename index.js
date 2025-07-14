@@ -2,7 +2,7 @@
   // Widget state
   let isOpen = false;
   let isLoading = false;
-  const messages = [];
+  let isTemplateQuestionsVisible = true;
 
   // API endpoints
   const CREATE_SESSION_URL =
@@ -16,7 +16,9 @@
     bot_name: 'Altius Assistant',
     bot_logo_url:
       'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQyIDc5LjE2MDkyNCwgMjAxNy8wNy8xMy0wMTowNjozOSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTggKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkU3OUJGRDU3NEI1MTExRjA5RUMzOUMyNkNDRjkyRTg0IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkU3OUJGRDU4NEI1MTExRjA5RUMzOUMyNkNDRjkyRTg0Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6RTc5QkZENTU0QjUxMTFGMDlFQzM5QzI2Q0NGOTJFODQiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6RTc5QkZENTY0QjUxMTFGMDlFQzM5QzI2Q0NGOTJFODQiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4eA3aDAAAC80lEQVR42syYX4gNURzH5969yvpzlV3h5i7lxSJ3pVYiYhUR8i+51nq5m+wKJTx4ULIvlAehZCT/pkQibZKQF0rywAMpyp9CHrRErjbX5+Tc9prMzJmZM2ZOfc+ZO3fumc/5/c75nd+5RqVSMUIVy2xHYw3NRXAJpTX0tQmtNyIq6ZDWy1EvQBuTCWgYRdlHC7BTkgjY7nCtraTEREylUkHcO5X6ac2dd2i8USz90rVIwlrQPu/GobnJcLFlpuX8c3N5rHNwnrSYvawFfnASAJ3CShYtjxfQMuupV7s8sSFuCy6TlnIqSxhEQ5yAXrtGBq2LB9AyG6kXaxiEcsn4fH4y6lWJswxmBEG7T1vETlqppluZOF6eXbp3CE2TVL6mFRqOjqOz4fZi55eLQedqXtxkAxDXIx1+fgHt/NLb87Hq2UwAgFG2l+VtELkA0eEF2gLYHddF4mH66n2dW1kZ9aCDwJUdVzFg+2i2uZg+inJLWu2lUj4I5Bo+H0WjIwb7gHYAdtFXPsgPLtM0o9MRgYlE9hia5AXnmVFjzTaaE2iiJrjHaDNgj7Rk1HR0m2YaOhwS7Kuc261+4JTPJFhSpPD3AsJdQtsBex9mh/OKgx0B+n6FugC7GempDuvVyxWXVezrJzqEDgD3Q1eO4GbBFT7g7kqrPf+fhyYV936Sz7W5wllmAbVqywdx7xiaRa75nmGcQrsB++yR5IqQdQVdCzKn0y4HH6fvnqDZgHUqwIl+bsipsorPw3QB/itl/4Z2oRmAPVA4HuyhPo8GyTtDPU6Dai7GvQWagu32VRFwAXurAFZHfUQsGod5fSasBWvnyRtxEAdspRLcwKArUvYynwHkAwNivTo5//plTGsG7LovnxRLZbSVqznomT3u+j3x2S24EIn8bDpgYoV+DxzAiqX7oh+0XwbxQLvTXzsJFpxA8xowvUe9P/++nkSz5J2ZDOChyk6i/dDkAim81S1T/HMAdicLcAA0L93eCWS/F+BvAQYAY/cSG57y',
+    template_questions: [],
   };
+  window.userAgentData = userAgentData;
 
   // Load CSS
   function loadCSS() {
@@ -111,32 +113,34 @@
         data.data.detail_collection.length > 0
       ) {
         const agentDetail = data.data.detail_collection[0];
+
+        // Parse template_question from JSON string to array
+        let templateQuestions = [];
+        if (agentDetail.template_question) {
+          try {
+            templateQuestions = JSON.parse(agentDetail.template_question);
+          } catch (error) {
+            console.warn('Failed to parse template_question:', error);
+            templateQuestions = [];
+          }
+        }
+
         userAgentData = {
           useragent_name: agentDetail.useragent_name || 'Altius People',
           bot_name: agentDetail.bot_name || 'Altius Assistant',
           bot_logo_url:
             agentDetail.bot_logo_url ||
             'https://ui-avatars.com/api/?name=AI&background=19c6c2&color=fff',
+          template_questions: templateQuestions,
         };
         updateHeaderElements();
-        addMessage(
-          'Halo! Saya adalah asisten virtual AI anda. ada yang bisa saya bantu ?',
-          false,
-          true
-        );
+        updateTemplateQuestions();
+        addMessage('Hai, ada yang bisa dibantu hari ini?', false);
       } else {
-        addMessage(
-          'Halo! Saya adalah asisten virtual AI anda. ada yang bisa saya bantu ?',
-          false,
-          true
-        );
+        addMessage('Hai, ada yang bisa dibantu hari ini?', false);
       }
     } catch (error) {
-      addMessage(
-        'Halo! Saya adalah asisten virtual AI anda. ada yang bisa saya bantu ?',
-        false,
-        true
-      );
+      addMessage('Hai, ada yang bisa dibantu hari ini?', false);
       console.error('Error fetching user agent details:', error);
     }
   }
@@ -146,6 +150,81 @@
     const name = document.getElementById('bot-name');
     if (logo) logo.src = userAgentData.bot_logo_url;
     if (name) name.textContent = userAgentData.bot_name;
+    window.userAgentData = userAgentData;
+  }
+
+  function updateTemplateQuestions() {
+    const templateQuestionsContainer =
+      document.getElementById('template-questions');
+    const templateQuestionsList = document.getElementById(
+      'template-questions-list'
+    );
+    const toggleButton = document.getElementById('template-questions-toggle');
+    const templateQuestionsContent = document.getElementById(
+      'template-questions-content'
+    );
+
+    if (
+      !templateQuestionsContainer ||
+      !templateQuestionsList ||
+      !toggleButton ||
+      !templateQuestionsContent
+    )
+      return;
+
+    if (
+      userAgentData.template_questions &&
+      userAgentData.template_questions.length > 0
+    ) {
+      templateQuestionsList.innerHTML = '';
+
+      userAgentData.template_questions.forEach(question => {
+        const questionElement = document.createElement('div');
+        questionElement.className = 'template-question-item';
+        questionElement.textContent = question;
+        questionElement.addEventListener('click', () =>
+          handleTemplateQuestionClick(question)
+        );
+        templateQuestionsList.appendChild(questionElement);
+      });
+
+      templateQuestionsContainer.style.display = 'block';
+      updateTemplateQuestionsVisibility();
+    } else {
+      templateQuestionsContainer.style.display = 'none';
+    }
+  }
+
+  function toggleTemplateQuestions() {
+    isTemplateQuestionsVisible = !isTemplateQuestionsVisible;
+    updateTemplateQuestionsVisibility();
+  }
+
+  function updateTemplateQuestionsVisibility() {
+    const templateQuestionsContent = document.getElementById(
+      'template-questions-content'
+    );
+    const toggleButton = document.getElementById('template-questions-toggle');
+
+    if (!templateQuestionsContent || !toggleButton) return;
+
+    if (isTemplateQuestionsVisible) {
+      templateQuestionsContent.style.display = 'block';
+      toggleButton.classList.remove('collapsed');
+    } else {
+      templateQuestionsContent.style.display = 'none';
+      toggleButton.classList.add('collapsed');
+    }
+  }
+
+  function handleTemplateQuestionClick(question) {
+    const input = document.getElementById('chat-input');
+    input.value = question;
+    input.focus();
+
+    // Trigger input event to enable send button
+    const event = new Event('input', { bubbles: true });
+    input.dispatchEvent(event);
   }
 
   // Create widget HTML
@@ -155,7 +234,7 @@
       <div id="chat-window">
         <div class="header">
           <div class="avatar avatar-card">
-            <img id="bot-logo" src="${userAgentData.bot_logo_url}" alt="Bot Logo" />
+            <img id="bot-logo" src="${userAgentData.bot_logo_url}" alt="Bot Logo" onerror="window.handleBotLogoError && window.handleBotLogoError(this)" />
             <span class="status-dot" id="bot-status"></span>
           </div>
           <div class="title">
@@ -176,6 +255,19 @@
           </div>
         </div>
         <div id="chat-messages"></div>
+        <div class="template-questions" id="template-questions" style="display: none;">
+          <div class="template-questions-header">
+            <div class="template-questions-title" >Pertanyaan Sering Diajukan:</div>
+            <button class="template-questions-toggle" id="template-questions-toggle" title="Sembunyikan/Tampilkan pertanyaan">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6,9 12,15 18,9"></polyline>
+              </svg>
+            </button>
+          </div>
+          <div class="template-questions-content" id="template-questions-content">
+            <div class="template-questions-list" id="template-questions-list"></div>
+          </div>
+        </div>
         <div class="input-area">
           <div class="input-container">
             <input id="chat-input" type="text" placeholder="Type here..." />
@@ -224,7 +316,7 @@
       .replace(/\\\\/g, '\\');
   }
 
-  function addMessage(message, isUser = false, initial = false) {
+  function addMessage(message, isUser = false) {
     const messagesContainer = document.getElementById('chat-messages');
     const senderName = isUser ? 'You' : userAgentData.bot_name;
     const time = new Date().toLocaleTimeString('id-ID', {
@@ -234,9 +326,17 @@
     const bubbleHeader = `<div class="bubble-header"><span class="sender-label">${senderName}</span><span class="bubble-time">${time}</span></div>`;
     // Unescape escape sequences first
     const unescapedMessage = unescapeString(message);
-    // Ganti newline dengan <br>
-    const htmlMessage = unescapedMessage.replace(/\n/g, '<br>');
-    const bubbleContent = `<div class="bubble-content">${htmlMessage}</div>`;
+
+    // Apply markdown formatting for bot messages only
+    let formattedMessage = unescapedMessage;
+    if (!isUser) {
+      formattedMessage = formatMessageToHTML(unescapedMessage);
+    } else {
+      // For user messages, just replace newlines with <br>
+      formattedMessage = unescapedMessage.replace(/\n/g, '<br>');
+    }
+
+    const bubbleContent = `<div class="bubble-content">${formattedMessage}</div>`;
     const messageHTML = `
     <div class="message${isUser ? ' user' : ''}">
       <div class="bubble">
@@ -360,6 +460,17 @@
       .getElementById('chat-send')
       .addEventListener('click', handleSendMessage);
 
+    // Add template questions toggle event listener
+    const templateQuestionsToggle = document.getElementById(
+      'template-questions-toggle'
+    );
+    if (templateQuestionsToggle) {
+      templateQuestionsToggle.addEventListener(
+        'click',
+        toggleTemplateQuestions
+      );
+    }
+
     // Handle input events
     const input = document.getElementById('chat-input');
     const sendButton = document.getElementById('chat-send');
@@ -396,7 +507,7 @@
     });
 
     // Hide menu on click outside
-    document.addEventListener('click', e => {
+    document.addEventListener('click', () => {
       if (dropdown.style.display === 'block') {
         dropdown.style.display = 'none';
       }
@@ -422,41 +533,113 @@
     window.session_id = '';
     ensureSession().then(() => {
       fetchUserAgentDetails();
+      updateTemplateQuestions(); // Add this line
     });
   }
 
   function formatMessageToHTML(message) {
-    // Ganti blok kode markdown ```...``` dengan <pre>...</pre>
-    message = message.replace(
-      /```[a-zA-Z]*\\n([\\s\\S]*?)```/g,
-      (match, code) => {
-        return `<pre>${code.replace(/\\n/g, '<br>')}</pre>`;
+    if (!message || !message.trim()) {
+      return '<span style="font-style: italic; color: #9ca3af;">[Pesan kosong]</span>';
+    }
+
+    // First, unescape the message
+    let processedMessage = unescapeString(message);
+
+    // Handle code blocks with language specification
+    processedMessage = processedMessage.replace(
+      /```([a-zA-Z]*)\n([\s\S]*?)```/g,
+      (match, language, code) => {
+        return `<pre class="code-block"><code>${code.replace(
+          /\n/g,
+          '<br>'
+        )}</code></pre>`;
       }
     );
 
-    // Ganti # Heading markdown dengan <b> atau <h2>
-    message = message.replace(/^### (.*)$/gm, '<b>$1</b>');
-    message = message.replace(/^## (.*)$/gm, '<b>$1</b>');
-    message = message.replace(/^# (.*)$/gm, '<b>$1</b>');
+    // Handle inline code
+    processedMessage = processedMessage.replace(
+      /`([^`]+)`/g,
+      '<code class="inline-code">$1</code>'
+    );
 
-    // Ganti list markdown - item menjadi <ul><li>item</li></ul>
-    // (Sederhana, tidak nested)
-    if (message.match(/^- /m)) {
-      message = message.replace(/(?:^|\n)- (.*?)(?=\n|$)/g, '<li>$1</li>');
-      message = message.replace(/(<li>[\s\S]*?<\/li>)/g, '<ul>$1</ul>');
-    }
-    // Ganti list markdown 1. item menjadi <ol><li>item</li></ol>
-    if (message.match(/^[0-9]+\\. /m)) {
-      message = message.replace(
-        /(?:^|\n)[0-9]+\\. (.*?)(?=\n|$)/g,
-        '<li>$1</li>'
-      );
-      message = message.replace(/(<li>[\s\S]*?<\/li>)/g, '<ol>$1</ol>');
-    }
+    // Handle headings
+    processedMessage = processedMessage.replace(
+      /^### (.*)$/gm,
+      '<h3 class="markdown-heading">$1</h3>'
+    );
+    processedMessage = processedMessage.replace(
+      /^## (.*)$/gm,
+      '<h2 class="markdown-heading">$1</h2>'
+    );
+    processedMessage = processedMessage.replace(
+      /^# (.*)$/gm,
+      '<h1 class="markdown-heading">$1</h1>'
+    );
 
-    // Ganti \n yang tersisa dengan <br>
-    message = message.replace(/\\n/g, '<br>');
+    // Handle horizontal rules
+    processedMessage = processedMessage.replace(
+      /^---$/gm,
+      '<hr class="markdown-hr">'
+    );
 
-    return message;
+    // Handle bold text
+    processedMessage = processedMessage.replace(
+      /\*\*(.*?)\*\*/g,
+      '<strong>$1</strong>'
+    );
+
+    // Handle italic text
+    processedMessage = processedMessage.replace(/\*(.*?)\*/g, '<em>$1</em>');
+
+    // Handle unordered lists
+    processedMessage = processedMessage.replace(
+      /(?:^|\n)- (.*?)(?=\n|$)/g,
+      '<li class="markdown-list-item">$1</li>'
+    );
+    processedMessage = processedMessage.replace(
+      /(<li class="markdown-list-item">[\s\S]*?<\/li>)/g,
+      '<ul class="markdown-list">$1</ul>'
+    );
+
+    // Handle ordered lists
+    processedMessage = processedMessage.replace(
+      /(?:^|\n)[0-9]+\. (.*?)(?=\n|$)/g,
+      '<li class="markdown-list-item">$1</li>'
+    );
+    processedMessage = processedMessage.replace(
+      /(<li class="markdown-list-item">[\s\S]*?<\/li>)/g,
+      '<ol class="markdown-list">$1</ol>'
+    );
+
+    // Handle paragraphs (text that's not in lists, headings, or code blocks)
+    processedMessage = processedMessage.replace(
+      /^(?!<[hou][1-6l]|<pre|<hr|<ul|<ol)(.+)$/gm,
+      '<p class="markdown-paragraph">$1</p>'
+    );
+
+    // Clean up empty paragraphs
+    processedMessage = processedMessage.replace(
+      /<p class="markdown-paragraph"><\/p>/g,
+      ''
+    );
+
+    // Handle line breaks within paragraphs
+    processedMessage = processedMessage.replace(/\n/g, '<br>');
+
+    return processedMessage;
   }
+
+  // Fungsi global untuk handle error gambar bot logo
+  window.handleBotLogoError = function (img) {
+    const botName =
+      (window.userAgentData && window.userAgentData.bot_name) || 'AI';
+    const initials = botName
+      .split(' ')
+      .map(word => word[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+    img.onerror = null; // Hindari infinite loop
+    img.src = `https://ui-avatars.com/api/?name=${initials}&background=19c6c2&color=fff`;
+  };
 })();

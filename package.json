@@ -9,7 +9,6 @@
     "minify": "terser altius-chat-widget.bundle.js -o altius-chat-widget.min.js --compress --mangle",
     "build:prod": "npm run build && npm run minify",
     "dev": "node dev-server.js",
-    "test": "jest",
     "lint": "eslint .",
     "format": "prettier --write .",
     "watch": "npx chokidar-cli '**/*.js' '**/*.css' -c 'npm run build:prod'"
