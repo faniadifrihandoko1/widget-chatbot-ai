@@ -4,10 +4,10 @@
 //   node build.js --target=web     → build web
 //   node build.js --target=mobile  → build mobile
 //   node build.js --all            → build web + mobile
+import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { execSync } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -70,11 +70,27 @@ function buildTarget(cfg) {
     return;
   }
 
-  // Inline CSS ke dalam fungsi loadCSS()
+  // Inline CSS: ganti baris @import url(...) dengan konten CSS langsung
+  // Ini mempertahankan seluruh fungsi loadCSS() dan shadow root injection
+  const escapedCss = css.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$\{/g, '\\${');
   let modifiedMain = main.replace(
-    /function loadCSS\(\)\s*\{[\s\S]*?document\.head\.appendChild\(link\);\s*\}/,
-    `function loadCSS() {\n    const style = document.createElement('style');\n    style.textContent = \`${css.replace(/`/g, '\\`')}\`;\n    document.head.appendChild(style);\n  }`
+    /styleSheet\.textContent\s*=\s*`@import url\("[^"]*"\);`\s*;/,
+    `styleSheet.textContent = \`${escapedCss}\`;`
   );
+
+  // Fallback: jika masih pakai pola lama (link element)
+  if (modifiedMain === main) {
+    modifiedMain = main.replace(
+      /function loadCSS\(\)\s*\{[\s\S]*?document\.head\.appendChild\(link\);\s*\}/,
+      `function loadCSS() {\n    const style = document.createElement('style');\n    style.textContent = \`${escapedCss}\`;\n    document.head.appendChild(style);\n  }`
+    );
+  }
+
+  if (modifiedMain === main) {
+    console.warn(`⚠️  [${cfg.label}] CSS TIDAK ter-inline! Periksa pattern loadCSS() di ${cfg.jsFile}`);
+  } else {
+    console.log(`✅ [${cfg.label}] CSS berhasil di-inline ke loadCSS()`);
+  }
 
   // Bundle header
   const bundled = `// Altius Chat Widget [${cfg.label}] - Bundled Version
