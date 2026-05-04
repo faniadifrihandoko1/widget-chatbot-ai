@@ -100,7 +100,7 @@
   function loadCSS() {
     // Use @import to ensure stylesheet loads within shadow root across browsers
     const styleSheet = document.createElement('style');
-    styleSheet.textContent = `@import url("styles/chat-widget.css");`;
+    styleSheet.textContent = `@import url("styles/chat-widget-mobile.css");`;
     if (root) {
       root.appendChild(styleSheet);
     } else {

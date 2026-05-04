@@ -16,7 +16,7 @@
 /* Main widget container */
 .chat-widget {
   position: fixed;
-  bottom: 20px;
+  bottom: 80px;
   right: 20px;
   z-index: 10000;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -45,8 +45,8 @@
 }
 
 .mascot-icon {
-  width: 100px;
-  height: 100px;
+  width: 72px;
+  height: 72px;
   object-fit: contain;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));

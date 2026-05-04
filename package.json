@@ -6,12 +6,16 @@
   "type": "module",
   "scripts": {
     "build": "node build.js",
-    "minify": "terser altius-chat-widget.bundle.js -o altius-chat-widget.min.js --compress --mangle",
-    "build:prod": "npm run build && npm run minify",
+    "build:web": "node build.js --target=web",
+    "build:mobile": "node build.js --target=mobile",
+    "build:all": "node build.js --all",
+    "unbuild": "node unbuild.js",
+    "unbuild:web": "node unbuild.js altius-chat-widget.min.js",
+    "unbuild:mobile": "node unbuild.js altius-chat-widget-mobile.min.js",
     "dev": "node dev-server.js",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "watch": "npx chokidar-cli '**/*.js' '**/*.css' -c 'npm run build:prod'"
+    "watch": "npx chokidar-cli '**/*.js' '**/*.css' -c 'node build.js --all'"
   },
   "keywords": [
     "chat",
@@ -27,7 +31,7 @@
     "eslint": "^8.0.0",
     "http-server": "^14.1.1",
     "jest": "^29.0.0",
-    "prettier": "^2.8.0",
+    "prettier": "^2.8.8",
     "terser": "^5.0.0"
   },
   "engines": {

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat Widget Demo - Fixed Spacing</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+
+      .demo-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        color: #333;
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .demo-text {
+        line-height: 1.6;
+        color: #666;
+        margin-bottom: 20px;
+      }
+
+      /* Test styling yang mungkin konflik */
+      br {
+        margin: 20px 0 !important;
+        height: 20px !important;
+        display: block !important;
+        background: red !important;
+      }
+
+      /* Ini untuk menunjukkan bahwa styling global tidak mempengaruhi chat widget */
+      .test-br {
+        margin: 30px 0 !important;
+        height: 30px !important;
+        background: blue !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="demo-container">
+      <h1>Chat Widget Demo - Fixed Spacing</h1>
+
+      <div class="demo-text">
+        <p>
+          Halaman ini mendemonstrasikan bahwa elemen &lt;br&gt; dalam chat
+          widget tidak terpengaruh oleh styling global dari project.
+        </p>
+
+        <p>
+          Di bawah ini adalah contoh elemen &lt;br&gt; dengan styling global
+          yang mungkin konflik:
+        </p>
+
+        <p>
+          Baris pertama<br class="test-br" />Baris kedua dengan styling global
+        </p>
+
+        <p>
+          Chat widget di pojok kanan bawah akan tetap memiliki spacing yang
+          normal untuk elemen &lt;br&gt;.
+        </p>
+      </div>
+
+      <div class="demo-text">
+        <h3>Fitur yang diperbaiki:</h3>
+        <ul>
+          <li>Spacing elemen &lt;br&gt; yang normal (tidak terlalu tinggi)</li>
+          <li>Tidak terpengaruh styling global dari project</li>
+          <li>Inline CSS reset untuk memastikan konsistensi</li>
+          <li>Styling yang lebih spesifik untuk chat widget</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Chat Widget Configuration -->
+    <script>
+      // Konfigurasi untuk demo
+      window.chat_api_key = 'demo-key-123';
+      window.personal_data = {
+        name: 'Demo User',
+        email: 'demo@example.com',
+      };
+    </script>
+
+    <!-- Load Chat Widget -->
+    <script src="index.js"></script>
+  </body>
+</html>
