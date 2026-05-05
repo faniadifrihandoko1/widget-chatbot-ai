@@ -724,9 +724,11 @@
 
     // Determine which icon to use based on window.isAltius flag
     const isAltius = window.isAltius !== undefined ? window.isAltius : false;
-    const chatIconHTML = isAltius
-      ? `<img src="https://altius.id/wp-content/uploads/2025/09/icon-Altius-mskot.png" alt="Altius Mascot" class="mascot-icon" />`
-      : `<img src="https://altius.id/wp-content/uploads/2025/09/ezgif.com-animated-gif-maker2.gif" alt="Chat Icon" class="mascot-icon" />`;
+    const chatIconHTML = window.iconUrl
+      ? `<img src="${window.iconUrl}" alt="Chat Icon url" class="mascot-icon" />`
+      : isAltius
+        ? `<img src="https://altius.id/wp-content/uploads/2025/09/icon-Altius-mskot.png" alt="Altius Mascot" class="mascot-icon" />`
+        : `<img src="https://altius.id/wp-content/uploads/2025/09/ezgif.com-animated-gif-maker2.gif" alt="Chat Icon" class="mascot-icon" />`;
     if (!isOpen) {
       // Chat akan dibuka, cek session
       if (!window.session_id || window.session_id === '') {
@@ -1018,9 +1020,11 @@
       // Show splash screen for new chat
       setTimeout(() => {
         const isAltius = window.isAltius !== undefined ? window.isAltius : false;
-        const chatIconHTML = isAltius
-          ? `<img src="https://altius.id/wp-content/uploads/2025/09/icon-Altius-mskot.png" alt="Altius Mascot" class="mascot-icon" />`
-          : `<img src="https://altius.id/wp-content/uploads/2025/09/ezgif.com-animated-gif-maker2.gif" alt="Chat Icon" class="mascot-icon" />`;
+        const chatIconHTML = window.iconUrl
+          ? `<img src="${window.iconUrl}" alt="Chat Icon url" class="mascot-icon" />`
+          : isAltius
+            ? `<img src="https://altius.id/wp-content/uploads/2025/09/icon-Altius-mskot.png" alt="Altius Mascot" class="mascot-icon" />`
+            : `<img src="https://altius.id/wp-content/uploads/2025/09/ezgif.com-animated-gif-maker2.gif" alt="Chat Icon" class="mascot-icon" />`;
         showSplashScreen(chatIconHTML);
       }, 300);
     }, 200);
