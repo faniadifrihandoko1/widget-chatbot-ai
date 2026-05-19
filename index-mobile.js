@@ -169,7 +169,7 @@
       }
       .session-create-spinner {
         border: 4px solid #f3f3f3;
-        border-top: 4px solid #19c6c2;
+        border-top: 4px solid var(--brand-color, #19c6c2);
         border-radius: 50%;
         width: 40px;
         height: 40px;
@@ -216,17 +216,17 @@
         transition: border-color 120ms ease, background 120ms ease;
         min-width: 0;
       }
-      .upload-dropzone.dragover { border-color: #19c6c2; background: #f0fdfd; }
-      .upload-icon { width: 22px; height: 22px; display: inline-block; color: #19c6c2; margin-bottom: 6px; }
+      .upload-dropzone.dragover { border-color: var(--brand-color, #19c6c2); background: #f0fdfd; }
+      .upload-icon { width: 22px; height: 22px; display: inline-block; color: var(--brand-color, #19c6c2); margin-bottom: 6px; }
       .upload-title { font-size: 15px; font-weight: 700; color: #0f172a; margin: 6px 0 4px; }
       .upload-subtitle { color: #55627a; font-size: 12px; line-height: 1.35; margin-bottom: 8px; word-break: break-word; }
       .upload-button {
         display: inline-flex; align-items: center; gap: 6px;
-        background: #19c6c2; color: #fff; border: none; border-radius: 7px;
+        background: var(--brand-color, #19c6c2); color: #fff; border: none; border-radius: 7px;
         padding: 7px 10px; font-weight: 700; font-size: 12px; cursor: pointer;
         transition: transform 80ms ease, box-shadow 120ms ease;
       }
-      .upload-button:hover { box-shadow: 0 4px 12px rgba(25,198,194,0.22); transform: translateY(-1px); }
+      .upload-button:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-1px); }
       .upload-note { color: #9aa4b2; font-size: 11px; margin-top: 8px; word-break: break-word; }
       .upload-status { color: #334155; font-size: 12px; margin-top: 8px; font-weight: 600; }
       .upload-error { color: #b91c1c; font-size: 12px; margin-top: 6px; }
@@ -242,7 +242,7 @@
       .upload-chip-success { background: #dcfce7; color: #166534; font-size: 11px; font-weight: 700; border-radius: 9999px; padding: 3px 6px; white-space: nowrap; max-width: 140px; overflow: hidden; text-overflow: ellipsis; display: none; }
       .upload-chip-error { background: #fee2e2; color: #b91c1c; font-size: 11px; font-weight: 700; border-radius: 9999px; padding: 3px 6px; white-space: nowrap; max-width: 140px; overflow: hidden; text-overflow: ellipsis; display: none; }
       .upload-progress-wrap { display: none; width: 100%; height: 3px; background: #eef2f7; border-radius: 2px; overflow: hidden; }
-      .upload-progress-bar { width: 0%; height: 100%; background: #19c6c2; transition: width 120ms ease; }
+      .upload-progress-bar { width: 0%; height: 100%; background: var(--brand-color, #19c6c2); transition: width 120ms ease; }
       .upload-remove { width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; border: none; border-radius: 6px; background: #fee2e2; color: #b91c1c; cursor: pointer; flex: 0 0 auto; }
       .upload-remove:hover { background: #fecaca; }
     `;
@@ -352,11 +352,12 @@
           useragent_name: agentDetail.useragent_name || 'Altius People',
           bot_name: agentDetail.bot_name || 'Altius Assistant',
           bot_logo_url:
-            agentDetail.bot_logo_url ||
+            window.icon_url || window.iconUrl ||
             `https://ui-avatars.com/api/?name=${getInitials(
               agentDetail.bot_name || 'Altius Assistant'
             )}&background=19c6c2&color=fff`,
           template_questions: templateQuestions,
+          color_brand: agentDetail.color_brand || null,
         };
         updateHeaderElements();
         updateTemplateQuestions();
@@ -380,8 +381,17 @@
   function updateHeaderElements() {
     const logo = $('.bot-logo');
     const name = $('.bot-name');
-    if (logo) logo.src = userAgentData.bot_logo_url;
+    if (logo) logo.src = window.iconUrl || window.icon_url || userAgentData.bot_logo_url;
     if (name) name.textContent = userAgentData.bot_name;
+    
+    // Apply brand color dynamically if available
+    if (userAgentData.color_brand) {
+      const widget = $('.chat-widget');
+      if (widget) {
+        widget.style.setProperty('--brand-color', userAgentData.color_brand);
+      }
+    }
+    
     window.userAgentData = userAgentData;
     // Hide skeleton hanya jika session & detail user sudah siap
     if (isHeaderReady()) {
@@ -469,23 +479,24 @@
 
   // Create widget HTML inside shadow root
   function createWidget() {
-    // Determine which icon to use based on priority:
-    // 1. window.iconUrl  -> Custom icon URL (highest priority)
-    // 2. window.isAltius = true  -> Uses Altius mascot PNG
-    // 3. window.isAltius = false -> Uses animated GIF (default)
     const isAltius = window.isAltius !== undefined ? window.isAltius : false;
-    const chatIconHTML = window.iconUrl
-      ? `<img src="${window.iconUrl}" alt="Chat Icon url" class="mascot-icon" />`
-      : isAltius
-        ? `<img src="https://altius.id/wp-content/uploads/2025/09/icon-Altius-mskot.png" alt="Altius Mascot" class="mascot-icon" />`
-        : `<img src="https://altius.id/wp-content/uploads/2025/09/ezgif.com-animated-gif-maker2.gif" alt="Chat Icon" class="mascot-icon" />`;
+    const customIcon = window.iconUrl || window.icon_url;
+
+    // Icon for splash and chat floating button
+    const chatIconUrl = customIcon || (isAltius
+      ? "https://altius.id/wp-content/uploads/2025/09/icon-Altius-mskot.png"
+      : "https://altius.id/wp-content/uploads/2025/09/ezgif.com-animated-gif-maker2.gif");
+    const chatIconHTML = `<img src="${chatIconUrl}" alt="Chat Icon" class="mascot-icon" />`;
+
+    // Logo for the chat header
+    const headerLogoUrl = customIcon || userAgentData.bot_logo_url;
 
     const widgetHTML = `
     <div class="chat-widget">
       <div class="chat-window">
         <div class="header">
           <div class="avatar avatar-card">
-            <img class="bot-logo" src="${userAgentData.bot_logo_url}" alt="Logo" onerror="window.handleBotLogoError && window.handleBotLogoError(this)" />
+            <img class="bot-logo" src="${headerLogoUrl}" alt="Logo" onerror="window.handleBotLogoError && window.handleBotLogoError(this)" />
             <span class="status-dot bot-status"></span>
           </div>
           <div class="title">
@@ -715,11 +726,11 @@
 
     // Determine which icon to use based on window.isAltius flag
     const isAltius = window.isAltius !== undefined ? window.isAltius : false;
-    const chatIconHTML = window.iconUrl
-      ? `<img src="${window.iconUrl}" alt="Chat Icon url" class="mascot-icon" />`
-      : isAltius
-        ? `<img src="https://altius.id/wp-content/uploads/2025/09/icon-Altius-mskot.png" alt="Altius Mascot" class="mascot-icon" />`
-        : `<img src="https://altius.id/wp-content/uploads/2025/09/ezgif.com-animated-gif-maker2.gif" alt="Chat Icon" class="mascot-icon" />`;
+    const customIcon = window.iconUrl || window.icon_url;
+    const chatIconUrl = customIcon || (isAltius
+      ? "https://altius.id/wp-content/uploads/2025/09/icon-Altius-mskot.png"
+      : "https://altius.id/wp-content/uploads/2025/09/ezgif.com-animated-gif-maker2.gif");
+    const chatIconHTML = `<img src="${chatIconUrl}" alt="Chat Icon" class="mascot-icon" />`;
     if (!isOpen) {
       // Chat akan dibuka, cek session
       if (!window.session_id || window.session_id === '') {
@@ -1011,11 +1022,11 @@
       // Show splash screen for new chat
       setTimeout(() => {
         const isAltius = window.isAltius !== undefined ? window.isAltius : false;
-        const chatIconHTML = window.iconUrl
-          ? `<img src="${window.iconUrl}" alt="Chat Icon url" class="mascot-icon" />`
-          : isAltius
-            ? `<img src="https://altius.id/wp-content/uploads/2025/09/icon-Altius-mskot.png" alt="Altius Mascot" class="mascot-icon" />`
-            : `<img src="https://altius.id/wp-content/uploads/2025/09/ezgif.com-animated-gif-maker2.gif" alt="Chat Icon" class="mascot-icon" />`;
+        const customIcon = window.iconUrl || window.icon_url;
+        const chatIconUrl = customIcon || (isAltius
+          ? "https://altius.id/wp-content/uploads/2025/09/icon-Altius-mskot.png"
+          : "https://altius.id/wp-content/uploads/2025/09/ezgif.com-animated-gif-maker2.gif");
+        const chatIconHTML = `<img src="${chatIconUrl}" alt="Chat Icon" class="mascot-icon" />`;
         showSplashScreen(chatIconHTML);
       }, 300);
     }, 200);
