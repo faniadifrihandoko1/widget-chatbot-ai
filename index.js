@@ -63,25 +63,14 @@
 
   // API base and endpoints
   const DEFAULT_API_BASE_URL =
-    // 'https://agiai-api-dabae8aacehvgcf5.indonesiacentral-01.azurewebsites.net';
-    "https://aionegml-dev-c3aqcqg7abhhb2ag.southeastasia-01.azurewebsites.net"
-  // Allow host page to override via several common globals. Trim any trailing slashes.
-  const API_BASE_URL =
-    (
-      window.ALTIUS_API_BASE_URL ||
-      window.altius_api_base_url ||
-      window.altiusApiBaseUrl ||
-      window.agiaiApiBaseUrl ||
-      ''
-    )
-      .toString()
-      .replace(/\/$/, '') || DEFAULT_API_BASE_URL;
+    'https://agiai-api-dabae8aacehvgcf5.indonesiacentral-01.azurewebsites.net';
+  // "https://aionegml-dev-c3aqcqg7abhhb2ag.southeastasia-01.azurewebsites.net"
+
+  // Trim any trailing slashes
+  const API_BASE_URL = DEFAULT_API_BASE_URL.replace(/\/+$/, '');
   const CREATE_SESSION_URL = `${API_BASE_URL}/create_session`;
   const CHAT_URL = `${API_BASE_URL}/chat`;
   const DETAIL_USERAGENT_URL = `${API_BASE_URL}/detail_useragent_chat`;
-
-  // Expose effective base URL for debugging if needed
-  window.ALTIUS_EFFECTIVE_API_BASE_URL = API_BASE_URL;
 
   // Global variables to store user agent data
   let userAgentData = {
@@ -293,6 +282,7 @@
     await ensureSession();
 
     try {
+      const minChar = window.min_char;
       const response = await fetch(CHAT_URL, {
         method: 'POST',
         headers: {
@@ -303,6 +293,7 @@
           session_id: window.session_id,
           prompt: message,
           user_profile: window.personal_data,
+          ...(minChar && { min_char: minChar }),
         }),
       });
 
