@@ -353,11 +353,14 @@
           bot_name: agentDetail.bot_name || 'Altius Assistant',
           bot_logo_url:
             window.icon_url || window.iconUrl ||
-            `https://ui-avatars.com/api/?name=${getInitials(
-              agentDetail.bot_name || 'Altius Assistant'
-            )}&background=19c6c2&color=fff`,
+            (window.isAltius ? 'https://altius.id/wp-content/uploads/2026/05/icon-altius-1.png' :
+              `https://ui-avatars.com/api/?name=${getInitials(
+                agentDetail.bot_name || 'Altius Assistant'
+              )}&background=19c6c2&color=fff`),
           template_questions: templateQuestions,
           color_brand: agentDetail.color_brand || null,
+          darkmode: agentDetail.darkmode || 'N',
+          layout: agentDetail.layout || 'mini',
         };
         updateHeaderElements();
         updateTemplateQuestions();
@@ -383,7 +386,7 @@
     const name = $('.bot-name');
     if (logo) logo.src = window.iconUrl || window.icon_url || userAgentData.bot_logo_url;
     if (name) name.textContent = userAgentData.bot_name;
-    
+
     // Apply brand color dynamically if available
     if (userAgentData.color_brand) {
       const widget = $('.chat-widget');
@@ -391,7 +394,19 @@
         widget.style.setProperty('--brand-color', userAgentData.color_brand);
       }
     }
-    
+
+    // Toggle dark mode button visibility
+    const themeToggleBtn = $('.theme-toggle-btn');
+    if (themeToggleBtn) {
+      themeToggleBtn.style.display = userAgentData.darkmode === 'Y' ? 'flex' : 'none';
+    }
+
+    // Toggle fullscreen button visibility
+    const fullscreenToggleBtn = $('.fullscreen-toggle-btn');
+    if (fullscreenToggleBtn) {
+      fullscreenToggleBtn.style.display = userAgentData.layout === 'full' ? 'flex' : 'none';
+    }
+
     window.userAgentData = userAgentData;
     // Hide skeleton hanya jika session & detail user sudah siap
     if (isHeaderReady()) {
@@ -520,7 +535,20 @@
             </div>
           </div>
           <div class="header-dropdown" style="display:none;">
-            <div class="dropdown-item new-chat-btn">Chat Baru</div>
+            <div class="dropdown-item new-chat-btn">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+              <span>Chat Baru</span>
+            </div>
+            <div class="dropdown-item theme-toggle-btn" style="display: none;">
+              <svg class="moon-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+              <svg class="sun-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none; margin-right: 8px;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+              <span class="theme-text">Mode Gelap</span>
+            </div>
+            <div class="dropdown-item fullscreen-toggle-btn" style="display: none;">
+              <svg class="maximize-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+              <svg class="minimize-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none; margin-right: 8px;"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path></svg>
+              <span class="fullscreen-text">Layar Penuh</span>
+            </div>
           </div>
         </div>
         <div class="chat-messages"></div>
@@ -566,6 +594,60 @@
       document.body.insertAdjacentHTML('beforeend', widgetHTML);
     }
     setupHeaderMenu();
+    setupThemeToggle();
+    setupFullscreenToggle();
+  }
+
+  let isDarkMode = false;
+  function setupThemeToggle() {
+    const themeToggleBtn = $('.theme-toggle-btn');
+    const widget = $('.chat-widget');
+    const moonIcon = $('.moon-icon');
+    const sunIcon = $('.sun-icon');
+
+    if (themeToggleBtn) {
+      themeToggleBtn.addEventListener('click', () => {
+        isDarkMode = !isDarkMode;
+        const themeText = $('.theme-text');
+        if (isDarkMode) {
+          if (widget) widget.classList.add('dark-theme');
+          if (moonIcon) moonIcon.style.display = 'none';
+          if (sunIcon) sunIcon.style.display = 'block';
+          if (themeText) themeText.textContent = 'Mode Terang';
+        } else {
+          if (widget) widget.classList.remove('dark-theme');
+          if (moonIcon) moonIcon.style.display = 'block';
+          if (sunIcon) sunIcon.style.display = 'none';
+          if (themeText) themeText.textContent = 'Mode Gelap';
+        }
+      });
+    }
+  }
+
+  let isFullscreen = false;
+  function setupFullscreenToggle() {
+    const fullscreenToggleBtn = $('.fullscreen-toggle-btn');
+    const chatWindow = $('.chat-window');
+    const maximizeIcon = $('.maximize-icon');
+    const minimizeIcon = $('.minimize-icon');
+    
+    if (fullscreenToggleBtn) {
+      fullscreenToggleBtn.addEventListener('click', () => {
+        isFullscreen = !isFullscreen;
+        const fullscreenText = $('.fullscreen-text');
+        if (isFullscreen) {
+          if (chatWindow) chatWindow.classList.add('fullscreen');
+          if (maximizeIcon) maximizeIcon.style.display = 'none';
+          if (minimizeIcon) minimizeIcon.style.display = 'block';
+          if (fullscreenText) fullscreenText.textContent = 'Layar Normal';
+        } else {
+          if (chatWindow) chatWindow.classList.remove('fullscreen');
+          if (maximizeIcon) maximizeIcon.style.display = 'block';
+          if (minimizeIcon) minimizeIcon.style.display = 'none';
+          if (fullscreenText) fullscreenText.textContent = 'Layar Penuh';
+        }
+      });
+    }
   }
 
   // Add message to chat
