@@ -468,12 +468,15 @@
 
     if (!templateQuestionsContent || !toggleButton) return;
 
+    const titleText = $('.template-questions-title');
     if (isTemplateQuestionsVisible) {
       templateQuestionsContent.style.display = 'block';
       toggleButton.classList.remove('collapsed');
+      if (titleText) titleText.textContent = 'Pertanyaan yang sering diajukan :';
     } else {
       templateQuestionsContent.style.display = 'none';
       toggleButton.classList.add('collapsed');
+      if (titleText) titleText.textContent = 'Tampilkan pertanyaan';
     }
   }
 
@@ -535,16 +538,16 @@
             </div>
           </div>
           <div class="header-dropdown" style="display:none;">
-            <div class="dropdown-item new-chat-btn">
+            <div class="dropdown-item new-chat-btn" title="Chat Baru">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
               <span>Chat Baru</span>
             </div>
-            <div class="dropdown-item theme-toggle-btn" style="display: none;">
+            <div class="dropdown-item theme-toggle-btn" style="display: none;" title="Mode Gelap">
               <svg class="moon-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
               <svg class="sun-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none; margin-right: 8px;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
               <span class="theme-text">Mode Gelap</span>
             </div>
-            <div class="dropdown-item fullscreen-toggle-btn" style="display: none;">
+            <div class="dropdown-item fullscreen-toggle-btn" style="display: none;" title="Layar Penuh">
               <svg class="maximize-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
               <svg class="minimize-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none; margin-right: 8px;"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path></svg>
               <span class="fullscreen-text">Layar Penuh</span>
@@ -568,13 +571,15 @@
           </div>
         </div>
         <div class="input-area">
-          <div class="input-container">
-            <input class="chat-input" type="text" placeholder="Type here..." />
-            <button class="chat-send" disabled>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-              </svg>
-            </button>
+          <div class="input-container-wrapper">
+            <div class="input-container">
+              <input class="chat-input" type="text" placeholder="Ketikkan pesanmu..." />
+              <button class="chat-send" disabled>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -614,11 +619,13 @@
           if (moonIcon) moonIcon.style.display = 'none';
           if (sunIcon) sunIcon.style.display = 'block';
           if (themeText) themeText.textContent = 'Mode Terang';
+          themeToggleBtn.title = 'Mode Terang';
         } else {
           if (widget) widget.classList.remove('dark-theme');
           if (moonIcon) moonIcon.style.display = 'block';
           if (sunIcon) sunIcon.style.display = 'none';
           if (themeText) themeText.textContent = 'Mode Gelap';
+          themeToggleBtn.title = 'Mode Gelap';
         }
       });
     }
@@ -630,7 +637,7 @@
     const chatWindow = $('.chat-window');
     const maximizeIcon = $('.maximize-icon');
     const minimizeIcon = $('.minimize-icon');
-    
+
     if (fullscreenToggleBtn) {
       fullscreenToggleBtn.addEventListener('click', () => {
         isFullscreen = !isFullscreen;
@@ -640,11 +647,13 @@
           if (maximizeIcon) maximizeIcon.style.display = 'none';
           if (minimizeIcon) minimizeIcon.style.display = 'block';
           if (fullscreenText) fullscreenText.textContent = 'Layar Normal';
+          fullscreenToggleBtn.title = 'Layar Normal';
         } else {
           if (chatWindow) chatWindow.classList.remove('fullscreen');
           if (maximizeIcon) maximizeIcon.style.display = 'block';
           if (minimizeIcon) minimizeIcon.style.display = 'none';
           if (fullscreenText) fullscreenText.textContent = 'Layar Penuh';
+          fullscreenToggleBtn.title = 'Layar Penuh';
         }
       });
     }
@@ -672,6 +681,14 @@
       hour: '2-digit',
       minute: '2-digit',
     });
+    const botLogo = window.iconUrl || window.icon_url || userAgentData.bot_logo_url;
+    let brandColorHex = '19c6c2';
+    if (userAgentData.color_brand && userAgentData.color_brand.startsWith('#')) {
+      brandColorHex = userAgentData.color_brand.substring(1);
+    }
+    const userLogo = `https://ui-avatars.com/api/?name=Anda&background=${brandColorHex}&color=fff`;
+    const avatarUrl = isUser ? userLogo : botLogo;
+    const avatarHTML = `<div class="avatar msg-avatar"><img src="${avatarUrl}" alt="${senderName}"></div>`;
     const bubbleHeader = `<div class="bubble-header"><span class="sender-label">${senderName}</span><span class="bubble-time">${time}</span></div>`;
     // Unescape escape sequences first
     const unescapedMessage = unescapeString(message);
@@ -691,10 +708,12 @@
     const bubbleContent = `<div class="bubble-content">${formattedMessage}</div>`;
     const messageHTML = `
     <div class="message${isUser ? ' user' : ''}">
+      ${!isUser ? avatarHTML : ''}
       <div class="bubble">
         ${bubbleHeader}
         ${bubbleContent}
       </div>
+      ${isUser ? avatarHTML : ''}
     </div>
   `;
     messagesContainer.insertAdjacentHTML('beforeend', messageHTML);
