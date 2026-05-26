@@ -407,6 +407,12 @@
       fullscreenToggleBtn.style.display = userAgentData.layout === 'full' ? 'flex' : 'none';
     }
 
+    if (userAgentData.layout === 'full') {
+      setFullscreenState(true);
+    } else {
+      setFullscreenState(false);
+    }
+
     window.userAgentData = userAgentData;
     // Hide skeleton hanya jika session & detail user sudah siap
     if (isHeaderReady()) {
@@ -633,29 +639,35 @@
   }
 
   let isFullscreen = false;
-  function setupFullscreenToggle() {
+
+  function setFullscreenState(state) {
+    isFullscreen = state;
     const fullscreenToggleBtn = $('.fullscreen-toggle-btn');
     const chatWindow = $('.chat-window');
     const maximizeIcon = $('.maximize-icon');
     const minimizeIcon = $('.minimize-icon');
+    const fullscreenText = $('.fullscreen-text');
 
+    if (isFullscreen) {
+      if (chatWindow) chatWindow.classList.add('fullscreen');
+      if (maximizeIcon) maximizeIcon.style.display = 'none';
+      if (minimizeIcon) minimizeIcon.style.display = 'block';
+      if (fullscreenText) fullscreenText.textContent = 'Layar Normal';
+      if (fullscreenToggleBtn) fullscreenToggleBtn.title = 'Layar Normal';
+    } else {
+      if (chatWindow) chatWindow.classList.remove('fullscreen');
+      if (maximizeIcon) maximizeIcon.style.display = 'block';
+      if (minimizeIcon) minimizeIcon.style.display = 'none';
+      if (fullscreenText) fullscreenText.textContent = 'Layar Penuh';
+      if (fullscreenToggleBtn) fullscreenToggleBtn.title = 'Layar Penuh';
+    }
+  }
+
+  function setupFullscreenToggle() {
+    const fullscreenToggleBtn = $('.fullscreen-toggle-btn');
     if (fullscreenToggleBtn) {
       fullscreenToggleBtn.addEventListener('click', () => {
-        isFullscreen = !isFullscreen;
-        const fullscreenText = $('.fullscreen-text');
-        if (isFullscreen) {
-          if (chatWindow) chatWindow.classList.add('fullscreen');
-          if (maximizeIcon) maximizeIcon.style.display = 'none';
-          if (minimizeIcon) minimizeIcon.style.display = 'block';
-          if (fullscreenText) fullscreenText.textContent = 'Layar Normal';
-          fullscreenToggleBtn.title = 'Layar Normal';
-        } else {
-          if (chatWindow) chatWindow.classList.remove('fullscreen');
-          if (maximizeIcon) maximizeIcon.style.display = 'block';
-          if (minimizeIcon) minimizeIcon.style.display = 'none';
-          if (fullscreenText) fullscreenText.textContent = 'Layar Penuh';
-          fullscreenToggleBtn.title = 'Layar Penuh';
-        }
+        setFullscreenState(!isFullscreen);
       });
     }
   }
