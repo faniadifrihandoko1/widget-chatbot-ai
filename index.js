@@ -471,6 +471,7 @@
   function updateTemplateQuestionsVisibility() {
     const templateQuestionsContent = $('.template-questions-content');
     const toggleButton = $('.template-questions-toggle');
+    const header = $('.template-questions-header');
 
     if (!templateQuestionsContent || !toggleButton) return;
 
@@ -478,10 +479,12 @@
     if (isTemplateQuestionsVisible) {
       templateQuestionsContent.style.display = 'block';
       toggleButton.classList.remove('collapsed');
+      if (header) header.classList.remove('collapsed');
       if (titleText) titleText.textContent = 'Pertanyaan yang sering diajukan :';
     } else {
       templateQuestionsContent.style.display = 'none';
       toggleButton.classList.add('collapsed');
+      if (header) header.classList.add('collapsed');
       if (titleText) titleText.textContent = 'Tampilkan pertanyaan';
     }
   }
@@ -1020,9 +1023,9 @@
     }
 
     // Add template questions toggle event listener
-    const templateQuestionsToggle = $('.template-questions-toggle');
-    if (templateQuestionsToggle) {
-      templateQuestionsToggle.addEventListener(
+    const templateQuestionsHeader = $('.template-questions-header');
+    if (templateQuestionsHeader) {
+      templateQuestionsHeader.addEventListener(
         'click',
         toggleTemplateQuestions
       );
