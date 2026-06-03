@@ -71,6 +71,8 @@
   const CREATE_SESSION_URL = `${API_BASE_URL}/create_session`;
   const CHAT_URL = `${API_BASE_URL}/chat`;
   const DETAIL_USERAGENT_URL = `${API_BASE_URL}/detail_useragent_chat`;
+  const CHAT_SESSIONS_URL = `${API_BASE_URL}/chat_sessions`;
+  const CHAT_HISTORY_URL = `${API_BASE_URL}/chat_history`;
 
   // Global variables to store user agent data
   let userAgentData = {
@@ -563,7 +565,42 @@
             </div>
           </div>
         </div>
-        <div class="chat-messages"></div>
+        <div class="chat-body-container">
+          ${window.show_history ? `
+          <div class="chat-sidebar">
+            <div class="chat-sidebar-header">
+              <h3 class="chat-sidebar-title">Riwayat Chat</h3>
+              <button class="chat-sidebar-collapse-btn" title="Tutup Riwayat">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="11 17 6 12 11 7"></polyline>
+                  <polyline points="18 17 13 12 18 7"></polyline>
+                </svg>
+              </button>
+            </div>
+            <div class="chat-sidebar-new-btn-container">
+              <button class="chat-sidebar-new-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                Chat Baru
+              </button>
+            </div>
+            <div class="chat-sidebar-list">
+              <div class="chat-sidebar-loading" style="display: none;">
+                <div class="session-create-spinner" style="width: 24px; height: 24px; border-width: 3px; border-top-color: #ef4444;"></div>
+              </div>
+              <div class="chat-sessions-container"></div>
+            </div>
+          </div>
+          <button class="chat-sidebar-expand-btn" title="Buka Riwayat" style="display: none;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+          ` : ''}
+          <div class="chat-main-content ${!window.show_history ? 'no-sidebar' : ''}">
+          <div class="chat-messages"></div>
         <div class="template-questions" style="display: none;">
           <div class="template-questions-header">
             <div class="template-questions-title" >Pertanyaan Sering Diajukan:</div>
@@ -592,6 +629,8 @@
           </div>
           
         </div>
+        </div>
+        </div>
       </div>
       <div class="chat-button" title="Buka Chat">
         <span class="icon-chat" style="display: block;">
@@ -611,6 +650,7 @@
     setupHeaderMenu();
     setupThemeToggle();
     setupFullscreenToggle();
+    setupSidebarToggle();
   }
 
   let isDarkMode = false;
@@ -650,6 +690,7 @@
     const maximizeIcon = $('.maximize-icon');
     const minimizeIcon = $('.minimize-icon');
     const fullscreenText = $('.fullscreen-text');
+    const newChatDropdownBtn = $('.new-chat-btn');
 
     if (isFullscreen) {
       if (chatWindow) chatWindow.classList.add('fullscreen');
@@ -657,12 +698,24 @@
       if (minimizeIcon) minimizeIcon.style.display = 'block';
       if (fullscreenText) fullscreenText.textContent = 'Layar Normal';
       if (fullscreenToggleBtn) fullscreenToggleBtn.title = 'Layar Normal';
+
+      if (window.show_history) {
+        loadChatSessions(1, 10);
+      }
     } else {
       if (chatWindow) chatWindow.classList.remove('fullscreen');
       if (maximizeIcon) maximizeIcon.style.display = 'block';
       if (minimizeIcon) minimizeIcon.style.display = 'none';
       if (fullscreenText) fullscreenText.textContent = 'Layar Penuh';
       if (fullscreenToggleBtn) fullscreenToggleBtn.title = 'Layar Penuh';
+
+      // Reset sidebar
+      const sidebar = $('.chat-sidebar');
+      const mainContent = $('.chat-main-content');
+      const expandBtn = $('.chat-sidebar-expand-btn');
+      if (sidebar) sidebar.classList.remove('collapsed');
+      if (mainContent) mainContent.classList.remove('expanded');
+      if (expandBtn) expandBtn.style.display = 'none';
     }
   }
 
@@ -672,6 +725,170 @@
       fullscreenToggleBtn.addEventListener('click', () => {
         setFullscreenState(!isFullscreen);
       });
+    }
+  }
+
+  function setupSidebarToggle() {
+    const collapseBtn = $('.chat-sidebar-collapse-btn');
+    const expandBtn = $('.chat-sidebar-expand-btn');
+    const sidebar = $('.chat-sidebar');
+    const mainContent = $('.chat-main-content');
+
+    if (collapseBtn && expandBtn && sidebar && mainContent) {
+      collapseBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        sidebar.classList.add('collapsed');
+        mainContent.classList.add('expanded');
+        expandBtn.style.display = 'flex';
+      });
+
+      expandBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        sidebar.classList.remove('collapsed');
+        mainContent.classList.remove('expanded');
+        expandBtn.style.display = 'none';
+      });
+    }
+  }
+
+  async function loadChatSessions(page = 1, pageSize = 10) {
+    if (!window.chat_api_key) return;
+    const container = $('.chat-sessions-container');
+    const loading = $('.chat-sidebar-loading');
+    if (!container || !loading) return;
+
+    if (page === 1) container.innerHTML = '';
+    loading.style.display = 'flex';
+    loading.style.justifyContent = 'center';
+    loading.style.padding = '20px';
+
+    try {
+      const response = await fetch(`${CHAT_SESSIONS_URL}?page=${page}&page_size=${pageSize}`, {
+        method: 'GET',
+        headers: {
+          'qubisa-token-key': window.chat_api_key,
+          'Content-Type': 'application/json'
+        }
+      });
+      const result = await response.json();
+      if (result.success && result.data) {
+        if (page === 1) container.innerHTML = ''; // Clear again just in case
+
+        const groupEl = document.createElement('div');
+        groupEl.className = 'chat-session-group';
+
+        const groupTitle = document.createElement('div');
+        groupTitle.className = 'chat-session-group-title';
+        groupTitle.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 6px; color: #b91c1c;"><path d="M4 4h6v6H4zm10 0h6v6h-6zM4 14h6v6H4zm10 0h6v6h-6z"/></svg><span style="color:#000; font-weight:700; font-size:15px;">Terkini</span>`;
+        groupTitle.style.display = 'flex';
+        groupTitle.style.alignItems = 'center';
+        groupTitle.style.marginBottom = '12px';
+
+        groupEl.appendChild(groupTitle);
+
+        const groupList = document.createElement('div');
+        groupList.className = 'chat-session-group-list';
+        groupList.style.display = 'flex';
+        groupList.style.flexDirection = 'column';
+        groupList.style.gap = '8px';
+
+        result.data.forEach((session, index) => {
+          const item = document.createElement('div');
+          item.className = 'chat-session-item recent-item' + (index === 0 && page === 1 ? ' active' : '');
+          item.setAttribute('data-session-id', session.session_id);
+
+          item.innerHTML = `
+            <div class="chat-session-item-content">
+              <div class="chat-session-msg" style="margin: 0; padding: 6px 0;">${session.latest_user_message || 'Obrolan baru'}</div>
+            </div>
+          `;
+          item.addEventListener('click', () => {
+            console.log('Switch to session', session.session_id);
+            loadChatHistory(session.session_id);
+          });
+          groupList.appendChild(item);
+        });
+
+        groupEl.appendChild(groupList);
+        container.appendChild(groupEl);
+      }
+    } catch (e) {
+      console.error('Error fetching chat sessions', e);
+    } finally {
+      loading.style.display = 'none';
+    }
+  }
+
+  async function loadChatHistory(sessionId) {
+    if (!window.chat_api_key) return;
+
+    // Update UI active state
+    const items = root ? root.querySelectorAll('.chat-session-item') : document.querySelectorAll('.chat-session-item');
+    if (items) {
+      items.forEach(el => {
+        if (el.getAttribute('data-session-id') === sessionId) {
+          el.classList.add('active');
+        } else {
+          el.classList.remove('active');
+        }
+      });
+    }
+
+    // Set current session
+    window.session_id = sessionId;
+
+    // Clear chat messages and show loading
+    const messagesContainer = $('.chat-messages');
+    if (messagesContainer) {
+      messagesContainer.innerHTML = '';
+      showChatMessagesSessionLoading('Memuat riwayat chat...');
+    }
+
+    // Hide template questions and splash
+    hasInteracted = true;
+    splashScreenShown = true;
+    isTemplateQuestionsVisible = false;
+    const templateQuestions = $('.template-questions');
+    if (templateQuestions) templateQuestions.style.display = 'none';
+
+    try {
+      const response = await fetch(CHAT_HISTORY_URL, {
+        method: 'POST',
+        headers: {
+          'qubisa-token-key': window.chat_api_key,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ session_id: sessionId })
+      });
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error('Sesi chat tidak valid atau telah berakhir');
+        }
+        throw new Error('Gagal memuat riwayat chat');
+      }
+
+      const result = await response.json();
+      hideChatMessagesSessionLoading();
+
+      if (result && result.chat_history && Array.isArray(result.chat_history)) {
+        if (result.chat_history.length === 0) {
+          addMessage('Tidak ada riwayat obrolan pada sesi ini.', false);
+        } else {
+          result.chat_history.forEach(msg => {
+            const isUser = msg.role === 'user';
+            addMessage(msg.content, isUser);
+          });
+        }
+      } else {
+        addMessage('Tidak ada riwayat obrolan pada sesi ini.', false);
+      }
+    } catch (e) {
+      console.error('Error loading chat history', e);
+      hideChatMessagesSessionLoading();
+      addMessage(e.message || 'Gagal memuat riwayat chat. Silakan coba lagi.', false);
     }
   }
 
@@ -1022,6 +1239,12 @@
       sendBtn.setAttribute('data-listener-added', 'true');
     }
 
+    const sidebarNewBtn = $('.chat-sidebar-new-btn');
+    if (sidebarNewBtn && !sidebarNewBtn.hasAttribute('data-listener-added')) {
+      sidebarNewBtn.addEventListener('click', startNewChat);
+      sidebarNewBtn.setAttribute('data-listener-added', 'true');
+    }
+
     // Add template questions toggle event listener
     const templateQuestionsHeader = $('.template-questions-header');
     if (templateQuestionsHeader) {
@@ -1104,7 +1327,7 @@
   }
 
   // Fungsi untuk chat baru
-  function startNewChat() {
+  async function startNewChat() {
     // Bersihkan chat, session, dan tampilkan welcome message baru
     const messagesContainer = $('.chat-messages');
     if (messagesContainer) messagesContainer.innerHTML = '';
@@ -1113,12 +1336,12 @@
     splashScreenShown = false; // Reset splash screen state
     isTemplateQuestionsVisible = true; // Show template questions again
     window.userAgentDetailFetched = false; // Reset detail fetched for new session
+
     // Pastikan composer kembali normal saat memulai chat baru
     try {
       setComposerDisabledUpload(false);
-    } catch (_) {
-      /* noop */
-    }
+    } catch (_) { /* noop */ }
+
     // Reset placeholder ke default
     try {
       const inputReset = $('.chat-input');
@@ -1126,27 +1349,55 @@
         inputReset.placeholder = 'Type here...';
         inputReset.removeAttribute('data-prev-ph');
       }
-    } catch (_) {
-      /* noop */
+    } catch (_) { /* noop */ }
+
+    // Siapkan referensi header (biarkan state header sebelumnya tetap ada)
+    const statusDot = $('.status-dot');
+    const statusText = $('.status-text');
+
+    // Tampilkan skeleton loading chat (tapi BUKAN skeleton header)
+    showChatMessagesSessionLoading('Memulai chat baru...');
+
+    const isAltius = window.isAltius !== undefined ? window.isAltius : false;
+    const customIcon = window.iconUrl || window.icon_url;
+    const chatIconUrl = customIcon || (isAltius
+      ? "https://altius.id/wp-content/uploads/2025/09/icon-Altius-mskot.png"
+      : "https://altius.id/wp-content/uploads/2025/09/ezgif.com-animated-gif-maker2.gif");
+    const chatIconHTML = `<img src="${chatIconUrl}" alt="Chat Icon" class="mascot-icon" />`;
+
+    showSplashScreen(chatIconHTML);
+
+    try {
+      await ensureSession();
+      // Gunakan data user config sebelumnya (termasuk avatar/status header), jadi tidak perlu panggil fetchUserAgentDetails() atau skeleton header
+      hideChatMessagesSessionLoading();
+
+      // Hapus state active di list sidebar history
+      const items = root ? root.querySelectorAll('.chat-session-item') : document.querySelectorAll('.chat-session-item');
+      if (items) items.forEach(el => el.classList.remove('active'));
+
+      // Munculkan template pertanyaan kembali (FAQ)
+      const templateQuestions = $('.template-questions');
+      if (templateQuestions) {
+        templateQuestions.style.display = 'block';
+        const templateContent = $('.template-questions-content');
+        if (templateContent) templateContent.style.display = 'flex';
+      }
+
+      // Fokus ke input chat
+      const input = $('.chat-input');
+      if (input) input.focus();
+    } catch (e) {
+      hideChatMessagesSessionLoading();
+      addMessage('Gagal memulai sesi chat. Silakan coba lagi.', false);
+      if (statusDot) {
+        statusDot.style.background = '#f44336';
+      }
+      if (statusText) {
+        statusText.textContent = 'Gagal terhubung...';
+        statusText.style.color = '#f44336';
+      }
     }
-    // Tidak perlu panggil ensureSession di sini, biarkan toggleChat handle
-    // Tutup dan buka lagi chat agar flow session baru berjalan
-    const chatWindow = $('.chat-window');
-    if (chatWindow) chatWindow.style.display = 'none';
-    isOpen = false;
-    setTimeout(() => {
-      toggleChat();
-      // Show splash screen for new chat
-      setTimeout(() => {
-        const isAltius = window.isAltius !== undefined ? window.isAltius : false;
-        const customIcon = window.iconUrl || window.icon_url;
-        const chatIconUrl = customIcon || (isAltius
-          ? "https://altius.id/wp-content/uploads/2025/09/icon-Altius-mskot.png"
-          : "https://altius.id/wp-content/uploads/2025/09/ezgif.com-animated-gif-maker2.gif");
-        const chatIconHTML = `<img src="${chatIconUrl}" alt="Chat Icon" class="mascot-icon" />`;
-        showSplashScreen(chatIconHTML);
-      }, 300);
-    }, 200);
   }
 
   function formatMessageToHTML(message) {
