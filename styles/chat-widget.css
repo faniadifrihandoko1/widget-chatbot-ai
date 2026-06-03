@@ -275,7 +275,8 @@
 
 .chat-widget.dark-theme .chat-session-item {
   background: #1f2937;
-  border-color: #374151;
+  border: 1px solid #374151;
+  border-left: 4px solid #fb7185;
 }
 
 .chat-widget.dark-theme .chat-session-item:hover {
@@ -284,7 +285,7 @@
 
 .chat-widget.dark-theme .chat-session-item.active {
   background: rgba(239, 68, 68, 0.1);
-  border-color: rgba(239, 68, 68, 0.3);
+  border-left-color: var(--brand-color, #19c6c2);
 }
 
 .chat-widget.dark-theme .chat-session-msg {
@@ -2089,11 +2090,30 @@ em {
 
 /* Fullscreen Dark Mode Overrides */
 .chat-widget.dark-theme .chat-window.fullscreen .chat-messages {
-  /* background: #111315 !important; */
   background: #1E293B !important;
 }
 
+.chat-widget.dark-theme .recent-text {
+  color: #ffffff !important;
+}
 
+/* Global Dark Mode Overrides for messages & loading */
+.chat-widget.dark-theme .chat-messages {
+  background: #1E293B;
+}
+
+.chat-widget.dark-theme .session-create-loading {
+  background: rgba(30, 41, 59, 0.85);
+}
+
+.chat-widget.dark-theme .session-create-loading-text {
+  color: #e4e6eb;
+}
+
+.chat-widget.dark-theme .session-create-spinner {
+  border-color: #334155;
+  border-top-color: var(--brand-color, #19c6c2);
+}
 
 .chat-widget.dark-theme .chat-window.fullscreen .template-questions {
   background: #1E293B !important;

@@ -824,7 +824,7 @@
     // Render header "Terkini"
     const groupTitle = document.createElement('div');
     groupTitle.className = 'chat-session-group-title';
-    groupTitle.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 6px; color: #b91c1c;"><path d="M4 4h6v6H4zm10 0h6v6h-6zM4 14h6v6H4zm10 0h6v6h-6z"/></svg><span style="color:#000; font-weight:700; font-size:15px;">Terkini</span>`;
+    groupTitle.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 6px; color: #b91c1c;"><path d="M4 4h6v6H4zm10 0h6v6h-6zM4 14h6v6H4zm10 0h6v6h-6z"/></svg><span class="recent-text" style="color:#000; font-weight:700; font-size:15px;">Terkini</span>`;
     groupTitle.style.display = 'flex';
     groupTitle.style.alignItems = 'center';
     groupTitle.style.marginBottom = '12px';
@@ -912,6 +912,12 @@
       const result = await response.json();
       if (result.success && result.data) {
         if (result.data.length < pageSize) chatHistoryHasMore = false;
+
+        // Filter sesi yang tidak memiliki riwayat chat (latest_user_message kosong/null)
+        // const validSessions = result.data.filter(session =>
+        //   session.latest_user_message && session.latest_user_message.trim() !== ''
+        // );
+
         chatHistoryData = [...chatHistoryData, ...result.data];
       } else {
         chatHistoryHasMore = false;
