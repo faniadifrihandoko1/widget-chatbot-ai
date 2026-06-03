@@ -753,16 +753,153 @@
     }
   }
 
-  async function loadChatSessions(page = 1, pageSize = 10) {
-    if (!window.chat_api_key) return;
-    const container = $('.chat-sessions-container');
-    const loading = $('.chat-sidebar-loading');
-    if (!container || !loading) return;
+  // --- CHAT HISTORY STATE & VIRTUALIZATION ---
+  let chatHistoryData = [];
+  let chatHistoryPage = 1;
+  let chatHistoryHasMore = true;
+  let isFetchingHistory = false;
+  let historyScrollContainer = null;
+  let historyInnerContainer = null;
+  const HISTORY_ITEM_HEIGHT = 65; // ~57px height + 8px margin-bottom gap
+  const HISTORY_HEADER_HEIGHT = 40; // "Terkini" title height with margin
+  const ITEM_BUFFER = 5;
 
-    if (page === 1) container.innerHTML = '';
-    loading.style.display = 'flex';
-    loading.style.justifyContent = 'center';
-    loading.style.padding = '20px';
+  function initChatHistory() {
+    if (!historyScrollContainer) {
+      historyScrollContainer = $('.chat-sidebar-list');
+      if (historyScrollContainer) {
+        historyInnerContainer = document.createElement('div');
+        historyInnerContainer.className = 'chat-session-group';
+
+        // Bersihkan loading default & container lama
+        historyScrollContainer.innerHTML = '';
+        historyScrollContainer.appendChild(historyInnerContainer);
+
+        // Add throttle for virtualization scroll performance
+        historyScrollContainer.addEventListener('scroll', () => {
+          if (window.historyScrollTimeout) return;
+          window.historyScrollTimeout = setTimeout(() => {
+            handleHistoryScroll();
+            window.historyScrollTimeout = null;
+          }, 60);
+        }, { passive: true });
+      }
+    }
+  }
+
+  function handleHistoryScroll() {
+    if (!historyScrollContainer || !historyInnerContainer) return;
+
+    // Render Virtual List
+    renderVirtualHistory();
+
+    // Infinite Scroll Logic
+    const { scrollTop, scrollHeight, clientHeight } = historyScrollContainer;
+    if (scrollTop + clientHeight >= scrollHeight - 80) {
+      if (!isFetchingHistory && chatHistoryHasMore) {
+        chatHistoryPage++;
+        fetchChatSessions(chatHistoryPage, 15);
+      }
+    }
+  }
+
+  function renderVirtualHistory() {
+    if (!historyScrollContainer || !historyInnerContainer) return;
+
+    if (chatHistoryData.length === 0 && !isFetchingHistory) {
+      historyInnerContainer.innerHTML = '';
+      return;
+    }
+
+    const { scrollTop, clientHeight } = historyScrollContainer;
+
+    // Kalkulasi indeks item yang masuk viewport
+    let startIndex = Math.floor(Math.max(0, scrollTop - HISTORY_HEADER_HEIGHT) / HISTORY_ITEM_HEIGHT) - ITEM_BUFFER;
+    startIndex = Math.max(0, startIndex);
+    let endIndex = Math.floor((scrollTop + clientHeight - HISTORY_HEADER_HEIGHT) / HISTORY_ITEM_HEIGHT) + ITEM_BUFFER;
+    endIndex = Math.min(chatHistoryData.length - 1, endIndex);
+
+    const fragment = document.createDocumentFragment();
+
+    // Render header "Terkini"
+    const groupTitle = document.createElement('div');
+    groupTitle.className = 'chat-session-group-title';
+    groupTitle.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 6px; color: #b91c1c;"><path d="M4 4h6v6H4zm10 0h6v6h-6zM4 14h6v6H4zm10 0h6v6h-6z"/></svg><span style="color:#000; font-weight:700; font-size:15px;">Terkini</span>`;
+    groupTitle.style.display = 'flex';
+    groupTitle.style.alignItems = 'center';
+    groupTitle.style.marginBottom = '12px';
+    fragment.appendChild(groupTitle);
+
+    const groupList = document.createElement('div');
+    groupList.className = 'chat-session-group-list';
+    groupList.style.display = 'flex';
+    groupList.style.flexDirection = 'column';
+    // Gunakan gap 8px (sudah dicover margin-bottom di item, tapi kita set flex-direction column)
+
+    // Spacer Atas
+    const topSpacerHeight = startIndex * HISTORY_ITEM_HEIGHT;
+    if (topSpacerHeight > 0) {
+      const topSpacer = document.createElement('div');
+      topSpacer.style.height = `${topSpacerHeight}px`;
+      topSpacer.style.flexShrink = '0';
+      groupList.appendChild(topSpacer);
+    }
+
+    // Render nodes yang terlihat (visible) dengan normal flow CSS
+    for (let i = startIndex; i <= endIndex; i++) {
+      if (!chatHistoryData[i]) continue;
+      const session = chatHistoryData[i];
+      const item = document.createElement('div');
+      item.className = 'chat-session-item recent-item';
+
+      const isFirstItem = i === 0 && chatHistoryPage === 1 && !window.session_id;
+      if (isFirstItem || window.session_id === session.session_id) {
+        item.classList.add('active');
+      }
+
+      item.setAttribute('data-session-id', session.session_id);
+
+      item.innerHTML = `
+        <div class="chat-session-item-content">
+          <div class="chat-session-msg" style="margin: 0; padding: 6px 0;">${session.latest_user_message || 'Obrolan baru'}</div>
+        </div>
+      `;
+      item.addEventListener('click', () => {
+        loadChatHistory(session.session_id);
+      });
+      groupList.appendChild(item);
+    }
+
+    // Spacer Bawah
+    const bottomSpacerHeight = (chatHistoryData.length - 1 - endIndex) * HISTORY_ITEM_HEIGHT;
+    if (bottomSpacerHeight > 0) {
+      const bottomSpacer = document.createElement('div');
+      bottomSpacer.style.height = `${bottomSpacerHeight}px`;
+      bottomSpacer.style.flexShrink = '0';
+      groupList.appendChild(bottomSpacer);
+    }
+
+    fragment.appendChild(groupList);
+
+    // Append loading spinner di paling bawah (Infinite scroll)
+    if (isFetchingHistory) {
+      const loading = document.createElement('div');
+      loading.className = 'chat-sidebar-loading-inline';
+      loading.innerHTML = `<div class="session-create-spinner" style="width: 24px; height: 24px; border-width: 3px; border-top-color: #ef4444; margin: 0 auto;"></div>`;
+      loading.style.width = '100%';
+      loading.style.textAlign = 'center';
+      loading.style.padding = '12px 0';
+      fragment.appendChild(loading);
+    }
+
+    historyInnerContainer.innerHTML = '';
+    historyInnerContainer.appendChild(fragment);
+  }
+
+  async function fetchChatSessions(page = 1, pageSize = 15) {
+    if (!window.chat_api_key) return;
+    isFetchingHistory = true;
+    renderVirtualHistory();
 
     try {
       const response = await fetch(`${CHAT_SESSIONS_URL}?page=${page}&page_size=${pageSize}`, {
@@ -774,70 +911,38 @@
       });
       const result = await response.json();
       if (result.success && result.data) {
-        if (page === 1) container.innerHTML = ''; // Clear again just in case
-
-        const groupEl = document.createElement('div');
-        groupEl.className = 'chat-session-group';
-
-        const groupTitle = document.createElement('div');
-        groupTitle.className = 'chat-session-group-title';
-        groupTitle.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 6px; color: #b91c1c;"><path d="M4 4h6v6H4zm10 0h6v6h-6zM4 14h6v6H4zm10 0h6v6h-6z"/></svg><span style="color:#000; font-weight:700; font-size:15px;">Terkini</span>`;
-        groupTitle.style.display = 'flex';
-        groupTitle.style.alignItems = 'center';
-        groupTitle.style.marginBottom = '12px';
-
-        groupEl.appendChild(groupTitle);
-
-        const groupList = document.createElement('div');
-        groupList.className = 'chat-session-group-list';
-        groupList.style.display = 'flex';
-        groupList.style.flexDirection = 'column';
-        groupList.style.gap = '8px';
-
-        result.data.forEach((session, index) => {
-          const item = document.createElement('div');
-          item.className = 'chat-session-item recent-item' + (index === 0 && page === 1 ? ' active' : '');
-          item.setAttribute('data-session-id', session.session_id);
-
-          item.innerHTML = `
-            <div class="chat-session-item-content">
-              <div class="chat-session-msg" style="margin: 0; padding: 6px 0;">${session.latest_user_message || 'Obrolan baru'}</div>
-            </div>
-          `;
-          item.addEventListener('click', () => {
-            console.log('Switch to session', session.session_id);
-            loadChatHistory(session.session_id);
-          });
-          groupList.appendChild(item);
-        });
-
-        groupEl.appendChild(groupList);
-        container.appendChild(groupEl);
+        if (result.data.length < pageSize) chatHistoryHasMore = false;
+        chatHistoryData = [...chatHistoryData, ...result.data];
+      } else {
+        chatHistoryHasMore = false;
       }
     } catch (e) {
       console.error('Error fetching chat sessions', e);
+      chatHistoryHasMore = false;
     } finally {
-      loading.style.display = 'none';
+      isFetchingHistory = false;
+      renderVirtualHistory();
     }
+  }
+
+  function loadChatSessions(page = 1, pageSize = 15) {
+    if (page === 1) {
+      chatHistoryData = [];
+      chatHistoryPage = 1;
+      chatHistoryHasMore = true;
+      initChatHistory();
+    }
+    fetchChatSessions(page, pageSize);
   }
 
   async function loadChatHistory(sessionId) {
     if (!window.chat_api_key) return;
 
-    // Update UI active state
-    const items = root ? root.querySelectorAll('.chat-session-item') : document.querySelectorAll('.chat-session-item');
-    if (items) {
-      items.forEach(el => {
-        if (el.getAttribute('data-session-id') === sessionId) {
-          el.classList.add('active');
-        } else {
-          el.classList.remove('active');
-        }
-      });
-    }
-
-    // Set current session
+    // Set current session & re-render virtual list
     window.session_id = sessionId;
+    if (typeof renderVirtualHistory === 'function') {
+      renderVirtualHistory();
+    }
 
     // Clear chat messages and show loading
     const messagesContainer = $('.chat-messages');
@@ -1372,9 +1477,10 @@
       // Gunakan data user config sebelumnya (termasuk avatar/status header), jadi tidak perlu panggil fetchUserAgentDetails() atau skeleton header
       hideChatMessagesSessionLoading();
 
-      // Hapus state active di list sidebar history
-      const items = root ? root.querySelectorAll('.chat-session-item') : document.querySelectorAll('.chat-session-item');
-      if (items) items.forEach(el => el.classList.remove('active'));
+      // Hapus state active dengan re-render list virtualization
+      if (typeof renderVirtualHistory === 'function') {
+        renderVirtualHistory();
+      }
 
       // Munculkan template pertanyaan kembali (FAQ)
       const templateQuestions = $('.template-questions');
