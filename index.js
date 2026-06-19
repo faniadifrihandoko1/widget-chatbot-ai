@@ -29,7 +29,8 @@
     if (!messagesContainer || splashScreenShown) return;
 
     // Determine greeting text based on username
-    const greetingText = window.username ? `Hello, ${window.username}` : 'Hello';
+    const defaultGreeting = window.username ? `Hello, ${window.username}` : 'Hello';
+    const greetingText = window.greeting_text || defaultGreeting;
 
     const splashHTML = `
       <div class="splash-screen">
@@ -566,8 +567,7 @@
           </div>
         </div>
         <div class="chat-body-container">
-          ${window.show_history ? `
-          <div class="chat-sidebar">
+          <div class="chat-sidebar" ${window.show_history === false ? 'style="display: none !important;"' : ''}>
             <div class="chat-sidebar-header">
               <h3 class="chat-sidebar-title">Riwayat Chat</h3>
               <button class="chat-sidebar-collapse-btn" title="Tutup Riwayat">
@@ -593,13 +593,12 @@
               <div class="chat-sessions-container"></div>
             </div>
           </div>
-          <button class="chat-sidebar-expand-btn" title="Buka Riwayat" style="display: none;">
+          <button class="chat-sidebar-expand-btn" title="Buka Riwayat" style="${window.show_history === false ? 'display: none !important;' : 'display: none;'}">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="9 18 15 12 9 6"></polyline>
             </svg>
           </button>
-          ` : ''}
-          <div class="chat-main-content ${!window.show_history ? 'no-sidebar' : ''}">
+          <div class="chat-main-content">
           <div class="chat-messages"></div>
         <div class="template-questions" style="display: none;">
           <div class="template-questions-header">
@@ -699,8 +698,8 @@
       if (fullscreenText) fullscreenText.textContent = 'Layar Normal';
       if (fullscreenToggleBtn) fullscreenToggleBtn.title = 'Layar Normal';
 
-      if (window.show_history) {
-        loadChatSessions(1, 10);
+      if (window.show_history !== false) {
+        loadChatSessions(1, 15);
       }
     } else {
       if (chatWindow) chatWindow.classList.remove('fullscreen');
@@ -740,7 +739,9 @@
         e.stopPropagation();
         sidebar.classList.add('collapsed');
         mainContent.classList.add('expanded');
-        expandBtn.style.display = 'flex';
+        if (window.show_history !== false) {
+          expandBtn.style.display = 'flex';
+        }
       });
 
       expandBtn.addEventListener('click', (e) => {

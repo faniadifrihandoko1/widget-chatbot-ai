@@ -151,7 +151,7 @@
   border-radius: 8px;
   cursor: pointer;
   margin-bottom: 8px;
-  background: #fff9f9;
+  background: #fef2f2;
   border-left: 4px solid #b91c1c;
   transition: all 0.2s ease;
   position: relative;
@@ -159,13 +159,13 @@
 }
 
 .chat-session-item:hover {
-  background: #fef2f2;
+  background: #fee2e2;
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
 .chat-session-item.active {
-  background: #fee2e2;
+  background: #fecaca;
   border-left-color: var(--brand-color, #19c6c2);
 }
 
@@ -1211,8 +1211,9 @@ em {
 .template-question-item {
   padding: 10px 14px;
   background: #fff;
-  border: 1px solid #d1e7ff;
-  border-radius: 16px 16px 16px 4px;
+  border: 1px solid #e2e8f0 !important;
+  border-left: 4px solid var(--brand-color, #19c6c2) !important;
+  border-radius: 8px !important;
   font-size: 13px;
   color: #222;
   cursor: pointer;
@@ -1244,9 +1245,9 @@ em {
   box-shadow: 0 3px 10px rgba(25, 198, 194, 0.15);
 }
 
-.template-question-item:hover::before {
+/* .template-question-item:hover::before {
   opacity: 1;
-}
+} */
 
 .template-question-item:active {
   transform: translateY(0) scale(0.98);
@@ -1638,7 +1639,7 @@ em {
 
 /* Fullscreen UI Overrides for Template Questions */
 .chat-window.fullscreen .template-questions {
-  background: #EAFFF5 !important;
+  background: #F8FAFD !important;
   padding: 24px 0 16px 0 !important;
   max-height: none !important;
   border-top: none !important;
@@ -1703,7 +1704,7 @@ em {
 }
 
 .chat-window.fullscreen .template-question-item {
-  background: #fff5f5 !important;
+  background: #ffffff !important;
   border: 1px solid #e2e8f0 !important;
   border-left: 4px solid var(--brand-color, #19c6c2) !important;
   border-radius: 8px !important;
@@ -1837,7 +1838,7 @@ em {
 
 /* Fullscreen UI Overrides for Chat Messages */
 .chat-window.fullscreen .chat-messages {
-  background: #eafff5 !important;
+  background: #F8FAFD !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
