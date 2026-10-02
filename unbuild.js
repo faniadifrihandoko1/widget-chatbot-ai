@@ -41,13 +41,19 @@ const FALLBACK_JS_KEY = {
 // ── Fungsi utama ───────────────────────────────────────────────────────────
 function extractFiles() {
   const sourceFile = process.argv[2] || 'altius-chat-widget.min.js';
-  const sourcePath = path.join(__dirname, sourceFile);
+  let sourcePath = path.join(__dirname, sourceFile);
+  if (!fs.existsSync(sourcePath)) {
+    const outputBuildPath = path.join(__dirname, 'output-build', sourceFile);
+    if (fs.existsSync(outputBuildPath)) {
+      sourcePath = outputBuildPath;
+    }
+  }
   const target = detectTarget(sourceFile);
 
-  console.log(`🔄 Extracting from: ${sourceFile}  (target: ${target})`);
+  console.log(`🔄 Extracting from: ${path.relative(__dirname, sourcePath)}  (target: ${target})`);
 
   if (!fs.existsSync(sourcePath)) {
-    console.error(`❌ File '${sourceFile}' tidak ditemukan!`);
+    console.error(`❌ File '${sourceFile}' tidak ditemukan di root maupun di folder 'output-build/'!`);
     process.exit(1);
   }
 
@@ -64,18 +70,18 @@ function extractFiles() {
       const payload = JSON.parse(decodeURIComponent(recoveryMatch[1]));
 
       // Ambil key dari payload itu sendiri (tersimpan saat build)
-      const jsKey  = payload.jsFile  || FALLBACK_JS_KEY[target];
+      const jsKey = payload.jsFile || FALLBACK_JS_KEY[target];
       const cssKey = payload.cssFile || FALLBACK_CSS_KEY[target];
 
-      const jsContent  = Buffer.from(payload[jsKey],  'base64').toString('utf8');
+      const jsContent = Buffer.from(payload[jsKey], 'base64').toString('utf8');
       const cssContent = Buffer.from(payload[cssKey], 'base64').toString('utf8');
 
       // Output ke folder extracted-<target>/ agar tidak tumpang tindih
       const outDir = `extracted-${target}`;
-      const jsOutName  = jsKey.replace('index', 'extracted-index'); // extracted-index.js / extracted-index-mobile.js
+      const jsOutName = jsKey.replace('index', 'extracted-index'); // extracted-index.js / extracted-index-mobile.js
       const cssOutName = cssKey; // styles/chat-widget.css atau styles/chat-widget-mobile.css
 
-      writeFile(path.join(__dirname, outDir, jsOutName),  jsContent);
+      writeFile(path.join(__dirname, outDir, jsOutName), jsContent);
       writeFile(path.join(__dirname, outDir, cssOutName), cssContent);
 
       console.log(`\n📊 Verifikasi:`);
@@ -96,7 +102,7 @@ function extractFiles() {
   }
 
   // ── METODE 2: Fallback – extract CSS yang di-inline ──────────────────────
-  const jsKey  = FALLBACK_JS_KEY[target];
+  const jsKey = FALLBACK_JS_KEY[target];
   const cssKey = FALLBACK_CSS_KEY[target];
   const outDir = `extracted-${target}`;
 

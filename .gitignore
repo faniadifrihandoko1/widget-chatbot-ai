@@ -7,6 +7,7 @@ yarn-error.log*
 # Build outputs
 dist/
 build/
+output-build/
 *.bundle.js
 *.min.js
 

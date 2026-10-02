@@ -34,7 +34,8 @@ altius-chat-widget/
 ├── components/
 │   └── ChatWidget.js
 ├── styles/
-│   └── chatWidget.css
+│   ├── chat-widget.css
+│   └── chat-widget-mobile.css
 ├── test/
 │   ├── widget.test.js
 │   ├── integration.test.js
