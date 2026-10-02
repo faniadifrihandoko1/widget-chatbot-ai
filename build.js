@@ -18,6 +18,8 @@ const buildAll = args.includes('--all');
 const targetArg = args.find((a) => a.startsWith('--target='));
 const target = buildAll ? 'all' : (targetArg ? targetArg.split('=')[1] : 'web');
 
+const OUTPUT_DIR = 'output-build';
+
 // ── Config per-target ──────────────────────────────────────────────────────
 const TARGETS = {
   web: {
@@ -99,28 +101,30 @@ function buildTarget(cfg) {
 
 ${modifiedMain}`.trim();
 
-  const bundlePath = path.join(__dirname, cfg.bundleOut);
-  const minPath = path.join(__dirname, cfg.minOut);
+  const bundlePath = path.join(__dirname, OUTPUT_DIR, cfg.bundleOut);
+  const minPath = path.join(__dirname, OUTPUT_DIR, cfg.minOut);
+  const bundleRelative = path.join(OUTPUT_DIR, cfg.bundleOut);
+  const minRelative = path.join(OUTPUT_DIR, cfg.minOut);
 
   // Tulis bundle (readable)
   writeFile(bundlePath, bundled);
 
   // Step 1: Minify dengan Terser
-  console.log(`🔧 Minifying ${cfg.bundleOut} → ${cfg.minOut}...`);
+  console.log(`🔧 Minifying ${bundleRelative} → ${minRelative}...`);
   try {
     execSync(
-      `npx.cmd terser "${cfg.bundleOut}" -o "${cfg.minOut}" --compress`,
+      `npx.cmd terser "${bundleRelative}" -o "${minRelative}" --compress`,
       { cwd: __dirname, stdio: 'pipe' }
     );
   } catch {
     execSync(
-      `node_modules/.bin/terser "${cfg.bundleOut}" -o "${cfg.minOut}" --compress`,
+      `node_modules/.bin/terser "${bundleRelative}" -o "${minRelative}" --compress`,
       { cwd: __dirname, stdio: 'pipe' }
     );
   }
 
   // Step 2: Inject recovery payload ke .min.js
-  console.log(`💉 Injecting recovery payload ke ${cfg.minOut}...`);
+  console.log(`💉 Injecting recovery payload ke ${minRelative}...`);
   const minifiedContent = readFile(minPath);
 
   const recoveryPayload = {
@@ -136,8 +140,8 @@ ${modifiedMain}`.trim();
   writeFile(minPath, minifiedContent + recoveryLine);
 
   console.log(`\n🎉 [${cfg.label}] Build selesai!`);
-  console.log(`   📄 ${cfg.bundleOut}  (development, readable)`);
-  console.log(`   📦 ${cfg.minOut}  (production, dengan embedded recovery)`);
+  console.log(`   📄 ${bundleRelative}  (development, readable)`);
+  console.log(`   📦 ${minRelative}  (production, dengan embedded recovery)`);
 }
 
 // ── Entry point ────────────────────────────────────────────────────────────
